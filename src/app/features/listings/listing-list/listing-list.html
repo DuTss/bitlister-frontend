@@ -1,1 +1,28 @@
-<p>listing-list works!</p>
+<div class="container">
+  <h1>Annonces récentes (P2P Bitcoin)</h1>
+
+  <div class="search-bar">
+    <input
+      type="text"
+      [(ngModel)]="searchQuery"
+      (input)="loadListings()"
+      placeholder="Rechercher un matériel, livre..."
+    />
+  </div>
+
+  <div class="grid">
+    @for (item of listings(); track item._id) {
+      <div class="card">
+        <h3>{{ item.title }}</h3>
+        <p class="price">⚡ {{ item.priceInSats | number }} Sats</p>
+        <p class="description">{{ item.description }}</p>
+        <div class="card-footer">
+          <small>📍 {{ item.location }}</small>
+          <small>Vendeur: <strong>{{ item.seller?.username }}</strong></small>
+        </div>
+      </div>
+    } @empty {
+      <p class="empty-state">Aucune annonce trouvée pour le moment.</p>
+    }
+  </div>
+</div>
