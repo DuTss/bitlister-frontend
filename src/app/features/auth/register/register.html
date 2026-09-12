@@ -1,0 +1,48 @@
+<div class="auth-container">
+  <h2>Créer un compte (sans KYC)</h2>
+
+  @if (errorMessage) {
+    <div class="error-banner">{{ errorMessage }}</div>
+  }
+
+  <form (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="username">Nom d'utilisateur</label>
+      <input
+        type="text"
+        id="username"
+        [(ngModel)]="credentials.username"
+        name="username"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="password">Mot de passe</label>
+      <input
+        type="password"
+        id="password"
+        [(ngModel)]="credentials.password"
+        name="password"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="lightningAddress">Adresse Lightning (optionnel)</label>
+      <input
+        type="text"
+        id="lightningAddress"
+        [(ngModel)]="credentials.lightningAddress"
+        name="lightningAddress"
+        placeholder="pseudo@getalby.com"
+      />
+    </div>
+
+    <button type="submit" class="btn-submit">Créer mon compte</button>
+  </form>
+
+  <p class="auth-link">
+    Déjà un compte ? <a routerLink="/login">Se connecter</a>
+  </p>
+</div>
