@@ -44,6 +44,7 @@
 
       @if (isOwner) {
         <footer class="detail-actions">
+          <a [routerLink]="['/listings', listing._id, 'edit']" class="btn-edit">Modifier</a>
           <button (click)="onDelete()" class="btn-delete">Supprimer mon annonce</button>
         </footer>
       }

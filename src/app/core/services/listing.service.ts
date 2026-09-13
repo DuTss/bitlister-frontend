@@ -27,6 +27,10 @@ export class ListingService {
     return this.http.post<{ message: string; listing: Listing }>(this.apiUrl, listingData);
   }
 
+  updateListing(id: string, listingData: Partial<Listing>): Observable<Listing> {
+    return this.http.put<Listing>(`${this.apiUrl}/${id}`, listingData);
+  }
+
   deleteListing(id: string): Observable<{ message: string }> {
     return this.http.delete<{ message: string }>(`${this.apiUrl}/${id}`);
   }
