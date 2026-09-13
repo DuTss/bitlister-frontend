@@ -1,0 +1,106 @@
+<div class="profile-container">
+  <h2>Mon Profil</h2>
+
+  @if (loading) {
+    <div class="loading-state">
+      <p>Chargement des informations...</p>
+    </div>
+  } @else {
+    @if (successMessage) {
+      <div class="alert alert-success">
+        {{ successMessage }}
+      </div>
+    }
+
+    @if (errorMessage) {
+      <div class="alert alert-error">
+        {{ errorMessage }}
+      </div>
+    }
+
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="profile-form">
+
+      <!-- Section Informations de base -->
+      <fieldset class="form-section">
+        <legend>Informations de compte</legend>
+
+        <div class="form-group">
+          <label for="email">Adresse Email (Non modifiable)</label>
+          <input id="email" type="email" formControlName="email" class="form-control" />
+        </div>
+
+        <div class="form-group">
+          <label for="username">Nom d'utilisateur</label>
+          <input
+            id="username"
+            type="text"
+            formControlName="username"
+            class="form-control"
+            [class.is-invalid]="profileForm.get('username')?.invalid && profileForm.get('username')?.touched"
+          />
+          @if (profileForm.get('username')?.invalid && profileForm.get('username')?.touched) {
+            <span class="error-text">Le pseudo doit contenir au moins 3 caractères.</span>
+          }
+        </div>
+      </fieldset>
+
+      <!-- Section Bitcoin Lightning -->
+      <fieldset class="form-section highlight-section">
+        <legend>⚡ Réception des paiements Lightning</legend>
+        <p class="section-help">
+          Renseigne ton adresse Lightning (ex: <code>satoshi&#64;getalby.com</code>) pour recevoir directement les paiements lors des ventes.
+        </p>
+
+        <div class="form-group">
+          <label for="lightningAddress">Adresse Lightning</label>
+          <input
+            id="lightningAddress"
+            type="text"
+            formControlName="lightningAddress"
+            placeholder="votre_pseudo@provider.com"
+            class="form-control"
+            [class.is-invalid]="profileForm.get('lightningAddress')?.invalid && profileForm.get('lightningAddress')?.touched"
+          />
+          @if (profileForm.get('lightningAddress')?.invalid && profileForm.get('lightningAddress')?.touched) {
+            <span class="error-text">Format d'adresse Lightning invalide.</span>
+          }
+        </div>
+      </fieldset>
+
+      <!-- Section Sécurité / Mot de passe -->
+      <fieldset class="form-section">
+        <legend>Changer de mot de passe (Optionnel)</legend>
+
+        <div class="form-group">
+          <label for="currentPassword">Mot de passe actuel</label>
+          <input
+            id="currentPassword"
+            type="password"
+            formControlName="currentPassword"
+            class="form-control"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="newPassword">Nouveau mot de passe</label>
+          <input
+            id="newPassword"
+            type="password"
+            formControlName="newPassword"
+            class="form-control"
+            [class.is-invalid]="profileForm.get('newPassword')?.invalid && profileForm.get('newPassword')?.touched"
+          />
+          @if (profileForm.get('newPassword')?.invalid && profileForm.get('newPassword')?.touched) {
+            <span class="error-text">Le nouveau mot de passe doit faire au moins 6 caractères.</span>
+          }
+        </div>
+      </fieldset>
+
+      <div class="form-actions">
+        <button type="submit" [disabled]="submitting || profileForm.invalid" class="btn-submit">
+          {{ submitting ? 'Enregistrement...' : 'Sauvegarder les modifications' }}
+        </button>
+      </div>
+    </form>
+  }
+</div>

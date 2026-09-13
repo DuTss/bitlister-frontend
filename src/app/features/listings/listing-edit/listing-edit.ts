@@ -52,7 +52,7 @@ export class ListingEdit implements OnInit {
     this.listingService.getListingById(id).subscribe({
       next: (listing) => {
         const currentUser = this.authService.currentUser();
-        const isOwner = currentUser && listing.seller && (currentUser.id === listing.seller.id || currentUser.username === listing.seller.username);
+        const isOwner = currentUser && listing.seller && (currentUser._id === listing.seller._id || currentUser.username === listing.seller.username);
 
         if (!isOwner) {
           this.router.navigate(['/listings', id]);

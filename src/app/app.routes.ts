@@ -5,6 +5,7 @@ import { ListingCreate } from './features/listings/listing-create/listing-create
 import { ListingEdit } from './features/listings/listing-edit/listing-edit';
 import { Login } from './features/auth/login/login';
 import { Register } from './features/auth/register/register';
+import { Profile } from './features/profile/profile/profile';
 import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
@@ -14,5 +15,6 @@ export const routes: Routes = [
   { path: 'listings/:id', component: ListingDetail },
   { path: 'login', component: Login },
   { path: 'register', component: Register },
+  { path: 'profile', component: Profile, canActivate: [authGuard] },
   { path: '**', redirectTo: '' }
 ];

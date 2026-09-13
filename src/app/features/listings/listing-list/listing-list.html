@@ -1,38 +1,61 @@
 <div class="container">
-  <div class="hero-section">
-    <h1>Le marché P2P Bitcoin sans intermédiaire</h1>
-    <p>Achetez et vendez en toute liberté en Satoshis.</p>
-
-    <div class="search-box">
+  <!-- Section Filtres / Recherche -->
+  <section class="filters-section">
+    <form (ngSubmit)="onSearch()" class="search-bar">
       <input
         type="text"
-        [(ngModel)]="searchQuery"
-        (input)="loadListings()"
-        placeholder="Rechercher un produit, du matériel, un livre..."
+        [(ngModel)]="searchTerm"
+        name="searchTerm"
+        placeholder="Rechercher une annonce (ex: Trezor, Bitcoin...)"
       />
+      <button type="submit" class="btn-search">Rechercher</button>
+      @if (searchTerm || selectedCategory !== 'Toutes') {
+        <button type="button" (click)="clearFilters()" class="btn-clear">Réinitialiser</button>
+      }
+    </form>
+
+    <div class="categories-pills">
+      @for (cat of categories; track cat) {
+        <button
+          type="button"
+          [class.active]="selectedCategory === cat"
+          (click)="onCategoryChange(cat)"
+          class="pill-btn"
+        >
+          {{ cat }}
+        </button>
+      }
     </div>
-  </div>
+  </section>
 
-  <div class="listings-grid">
-    @for (item of listings(); track item._id) {
-      <article class="card" [routerLink]="['/listings', item._id]">
-        <div class="card-header">
-          <span class="category-badge">{{ item.category }}</span>
-          <span class="price-tag">⚡ {{ item.priceInSats | number }} Sats</span>
-        </div>
-
-        <h2 class="card-title">{{ item.title }}</h2>
-        <p class="card-description">{{ item.description }}</p>
-
-        <div class="card-footer">
-          <span class="location">📍 {{ item.location }}</span>
-          <span class="seller">Vendeur : <strong>{{ item.seller?.username || 'Anonyme' }}</strong></span>
-        </div>
-      </article>
-    } @empty {
-      <div class="empty-state">
-        <p>🔍 Aucune annonce ne correspond à votre recherche.</p>
-      </div>
-    }
-  </div>
+  <!-- Grille des annonces -->
+  @if (loading) {
+    <div class="loading-state">
+      <p>Chargement des annonces...</p>
+    </div>
+  } @else if (errorMessage) {
+    <div class="error-banner">
+      <p>{{ errorMessage }}</p>
+    </div>
+  } @else if (listings.length === 0) {
+    <div class="empty-state">
+      <p>Aucune annonce ne correspond à votre recherche.</p>
+    </div>
+  } @else {
+    <div class="listings-grid">
+      @for (listing of listings; track listing._id) {
+        <a [routerLink]="['/listings', listing._id]" class="listing-card">
+          <div class="card-header">
+            <span class="category-badge">{{ listing.category }}</span>
+            <span class="price-badge">{{ listing.priceInSats | number }} Sats</span>
+          </div>
+          <h3>{{ listing.title }}</h3>
+          <p class="description">{{ listing.description | slice:0:100 }}{{ listing.description.length > 100 ? '...' : '' }}</p>
+          <div class="card-footer">
+            <span class="location">📍 {{ listing.location || 'Non précisé' }}</span>
+          </div>
+        </a>
+      }
+    </div>
+  }
 </div>

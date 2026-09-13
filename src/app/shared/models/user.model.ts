@@ -1,11 +1,20 @@
 export interface User {
-  id?: string;
+  _id: string;
   username: string;
+  email: string;
   lightningAddress?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface UpdateProfilePayload {
+  username?: string;
+  lightningAddress?: string;
+  currentPassword?: string;
+  newPassword?: string;
 }
 
 export interface AuthResponse {
-  message: string;
   token: string;
   user: User;
 }

@@ -1,0 +1,137 @@
+.profile-container {
+  max-width: 650px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #111827;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-section {
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-section legend {
+  font-weight: 600;
+  padding: 0 0.5rem;
+  color: #374151;
+}
+
+.highlight-section {
+  border-color: #f7931a;
+  background-color: #fffcf8;
+}
+
+.highlight-section legend {
+  color: #d97706;
+}
+
+.section-help {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.section-help code {
+  background: #f3f4f6;
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-group label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.form-control {
+  padding: 0.65rem 0.85rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.form-control:focus {
+  outline: 2px solid #f7931a;
+  border-color: transparent;
+}
+
+.form-control:disabled {
+  background-color: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.form-control.is-invalid {
+  border-color: #dc2626;
+}
+
+.error-text {
+  font-size: 0.8rem;
+  color: #dc2626;
+}
+
+.alert {
+  padding: 0.85rem 1rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.alert-success {
+  background-color: #ecfdf5;
+  color: #047857;
+  border: 1px solid #a7f3d0;
+}
+
+.alert-error {
+  background-color: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.btn-submit {
+  background-color: #f7931a;
+  color: #ffffff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  width: 100%;
+}
+
+.btn-submit:disabled {
+  background-color: #fcd34d;
+  cursor: not-allowed;
+}
+
+.loading-state {
+  text-align: center;
+  padding: 2rem;
+  color: #6b7280;
+}
