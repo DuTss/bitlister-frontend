@@ -1,0 +1,152 @@
+.back-link {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.back-link:hover {
+  color: var(--primary-orange);
+}
+
+.detail-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 2rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.detail-header {
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.category-badge {
+  background-color: #f1f3f5;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.3rem 0.7rem;
+  border-radius: 20px;
+  text-transform: uppercase;
+}
+
+.title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0.8rem 0;
+}
+
+.price-container {
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+.price-label {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.price-value {
+  color: var(--primary-orange);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.detail-body {
+  margin-bottom: 2rem;
+}
+
+.detail-body h2, .seller-box h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+}
+
+.description {
+  white-space: pre-line;
+  color: var(--text-main);
+  line-height: 1.6;
+}
+
+.seller-box {
+  background-color: #f9fafb;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.seller-info p {
+  margin-bottom: 0.5rem;
+}
+
+.lightning-box {
+  margin-top: 1rem;
+  padding: 0.8rem;
+  background: #fff;
+  border: 1px solid rgba(247, 147, 26, 0.3);
+  border-radius: var(--radius-sm);
+}
+
+.lightning-label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 0.3rem;
+}
+
+.lightning-address {
+  font-family: monospace;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--primary-orange);
+  word-break: break-all;
+}
+
+.no-ln {
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.detail-actions {
+  border-top: 1px solid var(--border-color);
+  padding-top: 1.2rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-delete {
+  background-color: transparent;
+  border: 1px solid #dc3545;
+  color: #dc3545;
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.btn-delete:hover {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.loading-state, .error-banner {
+  text-align: center;
+  padding: 2rem;
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.error-banner {
+  color: #dc3545;
+}

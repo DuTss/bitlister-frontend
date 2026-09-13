@@ -1,16 +1,23 @@
 <header class="navbar">
-  <div class="logo">
-    <a routerLink="/">⚡ <strong>BitLister</strong></a>
+  <div class="navbar-container">
+    <a routerLink="/" class="logo">
+      <span class="logo-icon">⚡</span>
+      <span class="logo-text">Bit<strong>Lister</strong></span>
+    </a>
+
+    <nav class="nav-links">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Annonces</a>
+
+      @if (authService.currentUser(); as user) {
+        <a routerLink="/create-listing" class="btn-create">+ Déposer une annonce</a>
+        <div class="user-menu">
+          <span class="user-badge">👤 {{ user.username }}</span>
+          <button (click)="authService.logout()" class="btn-logout">Déconnexion</button>
+        </div>
+      } @else {
+        <a routerLink="/login" class="btn-link">Connexion</a>
+        <a routerLink="/register" class="btn-primary">S'inscrire</a>
+      }
+    </nav>
   </div>
-  <nav>
-    <a routerLink="/">Annonces</a>
-    @if (authService.currentUser(); as user) {
-      <a routerLink="/create-listing" class="btn-primary">+ Déposer une annonce</a>
-      <span class="user-welcome">Bonjour, <strong>{{ user.username }}</strong></span>
-      <button (click)="authService.logout()" class="btn-logout">Déconnexion</button>
-    } @else {
-      <a routerLink="/login">Connexion</a>
-      <a routerLink="/register" class="btn-primary">S'inscrire</a>
-    }
-  </nav>
 </header>

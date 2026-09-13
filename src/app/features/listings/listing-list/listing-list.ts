@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ListingService } from '../../../core/services/listing.service';
 import { Listing } from '../../../shared/models/listing.model';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-listing-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './listing-list.html',
   styleUrl: './listing-list.css'
 })

@@ -1,1 +1,40 @@
-/* You can add global styles to this file, and also import other style files */
+/* Reset & Theme Variables */
+:root {
+  --primary-orange: #f7931a;
+  --primary-hover: #e08213;
+  --bg-dark: #121212;
+  --bg-card: #ffffff;
+  --bg-page: #f8f9fa;
+  --text-main: #212529;
+  --text-muted: #6c757d;
+  --border-color: #e9ecef;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-page);
+  color: var(--text-main);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Utilitaires globaux */
+.container {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+}

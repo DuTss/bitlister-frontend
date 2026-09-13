@@ -1,0 +1,52 @@
+<div class="container">
+  <a routerLink="/" class="back-link">← Retour aux annonces</a>
+
+  @if (loading) {
+    <div class="loading-state">
+      <p>Chargement de l'annonce...</p>
+    </div>
+  } @else if (errorMessage) {
+    <div class="error-banner">
+      <p>{{ errorMessage }}</p>
+    </div>
+  } @else if (listing) {
+    <article class="detail-card">
+      <header class="detail-header">
+        <span class="category-badge">{{ listing.category }}</span>
+        <h1 class="title">{{ listing.title }}</h1>
+        <div class="price-container">
+          <span class="price-label">Prix P2P</span>
+          <span class="price-value">⚡ {{ listing.priceInSats | number }} Satoshis</span>
+        </div>
+      </header>
+
+      <section class="detail-body">
+        <h2>Description</h2>
+        <p class="description">{{ listing.description }}</p>
+      </section>
+
+      <section class="seller-box">
+        <h2>Informations Vendeur</h2>
+        <div class="seller-info">
+          <p><strong>Vendeur :</strong> {{ listing.seller?.username || 'Anonyme' }}</p>
+          <p><strong>Localisation :</strong> 📍 {{ listing.location }}</p>
+
+          @if (listing.seller?.lightningAddress) {
+            <div class="lightning-box">
+              <span class="lightning-label">Adresse Lightning (LNURL / LN-Address) :</span>
+              <code class="lightning-address">{{ listing.seller?.lightningAddress }}</code>
+            </div>
+          } @else {
+            <p class="no-ln">Ce vendeur n'a pas renseigné d'adresse Lightning publique.</p>
+          }
+        </div>
+      </section>
+
+      @if (isOwner) {
+        <footer class="detail-actions">
+          <button (click)="onDelete()" class="btn-delete">Supprimer mon annonce</button>
+        </footer>
+      }
+    </article>
+  }
+</div>

@@ -9,4 +9,4 @@ import { Header } from './shared/components/header/header';
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class AppComponent {}
+export class App {}
