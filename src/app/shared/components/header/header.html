@@ -5,6 +5,7 @@
   <nav>
     <a routerLink="/">Annonces</a>
     @if (authService.currentUser(); as user) {
+      <a routerLink="/create-listing" class="btn-primary">+ Déposer une annonce</a>
       <span class="user-welcome">Bonjour, <strong>{{ user.username }}</strong></span>
       <button (click)="authService.logout()" class="btn-logout">Déconnexion</button>
     } @else {

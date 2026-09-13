@@ -1,10 +1,13 @@
 import { Routes } from '@angular/router';
 import { ListingList } from './features/listings/listing-list/listing-list';
-import { Register } from './features/auth/register/register';
+import { ListingCreate } from './features/listings/listing-create/listing-create';
 import { Login } from './features/auth/login/login';
+import { Register } from './features/auth/register/register';
+import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', component: ListingList },
+  { path: 'create-listing', component: ListingCreate, canActivate: [authGuard] },
   { path: 'login', component: Login },
   { path: 'register', component: Register },
   { path: '**', redirectTo: '' }

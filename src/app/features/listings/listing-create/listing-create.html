@@ -1,0 +1,71 @@
+<div class="form-container">
+  <h2>Publier une annonce</h2>
+
+  @if (errorMessage) {
+    <div class="error-banner">{{ errorMessage }}</div>
+  }
+
+  <form (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="title">Titre de l'annonce</label>
+      <input
+        type="text"
+        id="title"
+        [(ngModel)]="listing.title"
+        name="title"
+        placeholder="ex: Trezor Model T neuf"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="priceInSats">Prix (en Satoshis)</label>
+      <input
+        type="number"
+        id="priceInSats"
+        [(ngModel)]="listing.priceInSats"
+        name="priceInSats"
+        placeholder="ex: 50000"
+        min="1"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="category">Catégorie</label>
+      <select id="category" [(ngModel)]="listing.category" name="category">
+        <option value="Hardware">Hardware</option>
+        <option value="Livres">Livres</option>
+        <option value="Informatique">Informatique</option>
+        <option value="Services">Services</option>
+        <option value="Divers">Divers</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="location">Localisation (Ville ou Région)</label>
+      <input
+        type="text"
+        id="location"
+        [(ngModel)]="listing.location"
+        name="location"
+        placeholder="ex: Paris, Lyon, Envoi possible..."
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea
+        id="description"
+        [(ngModel)]="listing.description"
+        name="description"
+        rows="5"
+        placeholder="Détaillez l'état du matériel, le mode de livraison ou de remise en main propre..."
+        required
+      ></textarea>
+    </div>
+
+    <button type="submit" class="btn-submit">Déposer l'annonce</button>
+  </form>
+</div>
