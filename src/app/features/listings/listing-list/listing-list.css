@@ -128,6 +128,9 @@
 }
 
 .card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   font-size: 0.8rem;
   color: var(--text-muted);
   border-top: 1px solid var(--border-color);
@@ -138,4 +141,26 @@
   text-align: center;
   padding: 3rem 1rem;
   color: var(--text-muted);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.btn-fav {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+  border-radius: 50%;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.btn-fav:hover {
+  transform: scale(1.2);
+  background-color: rgba(0, 0, 0, 0.05);
 }

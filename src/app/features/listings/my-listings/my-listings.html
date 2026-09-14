@@ -1,0 +1,68 @@
+<div class="my-listings-container">
+  <div class="header-actions">
+    <h2>Mes Annonces</h2>
+    <a routerLink="/listings/new" class="btn-primary">+ Créer une annonce</a>
+  </div>
+
+  @if (successMessage) {
+    <div class="alert alert-success">{{ successMessage }}</div>
+  }
+  @if (errorMessage) {
+    <div class="alert alert-error">{{ errorMessage }}</div>
+  }
+
+  <div class="tabs">
+    <button [class.active]="activeTab === 'ALL'" (click)="setFilter('ALL')">
+      Toutes ({{ listings.length }})
+    </button>
+    <button [class.active]="activeTab === 'ACTIVE'" (click)="setFilter('ACTIVE')">
+      Actives
+    </button>
+    <button [class.active]="activeTab === 'SOLD'" (click)="setFilter('SOLD')">
+      Vendues
+    </button>
+    <button [class.active]="activeTab === 'ARCHIVED'" (click)="setFilter('ARCHIVED')">
+      Archivées
+    </button>
+  </div>
+
+  @if (loading) {
+    <div class="loading-state">Chargement de vos annonces...</div>
+  } @else if (filteredListings.length === 0) {
+    <div class="empty-state">
+      <p>Aucune annonce trouvée dans cette catégorie.</p>
+    </div>
+  } @else {
+    <div class="listings-list">
+      @for (item of filteredListings; track item._id) {
+        <div class="listing-item-card" [class.is-sold]="item.status === 'SOLD'">
+          <div class="item-info">
+            <div class="item-badges">
+              <span class="badge-category">{{ item.category }}</span>
+              <span class="badge-status" [ngClass]="item.status">
+                {{ item.status === 'ACTIVE' ? 'En vente' : item.status === 'SOLD' ? 'Vendu' : 'Archivé' }}
+              </span>
+            </div>
+            <h3 class="item-title">{{ item.title }}</h3>
+            <p class="item-price">{{ item.priceInSats | number }} Sats</p>
+          </div>
+
+          <div class="item-actions">
+            <select
+              [value]="item.status"
+              (change)="changeStatus(item, $any($event.target).value)"
+              class="status-select"
+            >
+              <option value="ACTIVE">En vente</option>
+              <option value="SOLD">Marquer comme Vendu</option>
+              <option value="ARCHIVED">Archiver</option>
+            </select>
+
+            <a [routerLink]="['/listings', item._id, 'edit']" class="btn-action edit">Éditer</a>
+            <button type="button" (click)="onDelete(item._id)" class="btn-action delete">Supprimer</button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

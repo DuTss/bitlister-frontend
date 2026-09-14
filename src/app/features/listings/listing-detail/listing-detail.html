@@ -28,7 +28,7 @@
       <section class="seller-box">
         <h2>Informations Vendeur</h2>
         <div class="seller-info">
-          <p><strong>Vendeur :</strong> {{ listing.seller?.username || 'Anonyme' }}</p>
+          <p><strong>Vendeur :</strong> {{ listing.seller?.pseudo || 'Anonyme' }}</p>
           <p><strong>Localisation :</strong> 📍 {{ listing.location }}</p>
 
           @if (listing.seller?.lightningAddress) {

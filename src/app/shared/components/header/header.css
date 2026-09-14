@@ -43,10 +43,17 @@
   transition: color 0.2s;
 }
 
-.nav-links a:hover, .nav-links a.active {
+.nav-links a:hover,
+.nav-links a.active {
   color: #fff;
 }
 
+/* Liens simples type Connexion */
+.btn-link {
+  color: #d1d5db;
+}
+
+/* Bouton principal (Inscription) */
 .btn-primary {
   background-color: var(--primary-orange) !important;
   color: #fff !important;
@@ -60,6 +67,7 @@
   background-color: var(--primary-hover) !important;
 }
 
+/* Bouton Déposer une annonce */
 .btn-create {
   background-color: rgba(247, 147, 26, 0.15);
   color: var(--primary-orange) !important;
@@ -67,8 +75,15 @@
   padding: 0.4rem 0.8rem;
   border-radius: var(--radius-sm);
   font-size: 0.9rem;
+  transition: all 0.2s ease;
 }
 
+.btn-create:hover {
+  background-color: var(--primary-orange);
+  color: #fff !important;
+}
+
+/* Menu Utilisateur Connecté */
 .user-menu {
   display: flex;
   align-items: center;
@@ -80,6 +95,10 @@
 .user-badge {
   font-size: 0.9rem;
   color: #e5e7eb;
+  font-weight: 500;
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--radius-sm);
 }
 
 .btn-logout {
@@ -98,9 +117,25 @@
   color: #fff;
 }
 
-@media (max-width: 640px) {
+/* Mobile & Responsive */
+@media (max-width: 768px) {
   .navbar-container {
     flex-direction: column;
     gap: 0.8rem;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.8rem;
+  }
+
+  .user-menu {
+    border-left: none;
+    border-top: 1px solid #333;
+    padding-left: 0;
+    padding-top: 0.6rem;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 }

@@ -24,7 +24,7 @@ export class ListingDetail implements OnInit {
 
   get isOwner(): boolean {
     const currentUser = this.authService.currentUser();
-    return !!(currentUser && this.listing?.seller && (currentUser._id === this.listing.seller._id || currentUser.username === this.listing.seller.username));
+    return !!(currentUser && this.listing?.seller && (currentUser._id === this.listing.seller._id || currentUser.pseudo === this.listing.seller.pseudo));
   }
 
   ngOnInit(): void {

@@ -15,7 +15,8 @@ export class Register {
   private router = inject(Router);
 
   credentials = {
-    username: '',
+    pseudo: '',
+    email: '',
     password: '',
     lightningAddress: ''
   };

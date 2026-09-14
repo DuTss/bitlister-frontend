@@ -13,13 +13,13 @@ export class AuthService {
 
   currentUser = signal<User | null>(this.getUserFromStorage());
 
-  register(credentials: { username: string; password: string; lightningAddress?: string }): Observable<AuthResponse> {
+  register(credentials: { email: string; pseudo: string; password: string; lightningAddress?: string }): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/register`, credentials).pipe(
       tap(res => this.handleAuthSuccess(res))
     );
   }
 
-  login(credentials: { username: string; password: string }): Observable<AuthResponse> {
+  login(credentials: { email: string; password: string }): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, credentials).pipe(
       tap(res => this.handleAuthSuccess(res))
     );

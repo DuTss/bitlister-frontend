@@ -41,7 +41,7 @@ export class ListingEdit implements OnInit {
   private initForm(): void {
     this.editForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(3)]],
-      category: ['Électronique', Validators.required],
+      category: ['Informatique', Validators.required],
       priceInSats: [null, [Validators.required, Validators.min(1)]],
       location: ['', Validators.required],
       description: ['', [Validators.required, Validators.minLength(10)]]
@@ -52,7 +52,7 @@ export class ListingEdit implements OnInit {
     this.listingService.getListingById(id).subscribe({
       next: (listing) => {
         const currentUser = this.authService.currentUser();
-        const isOwner = currentUser && listing.seller && (currentUser._id === listing.seller._id || currentUser.username === listing.seller.username);
+        const isOwner = currentUser && listing.seller && (currentUser._id === listing.seller._id || currentUser.pseudo === listing.seller.pseudo);
 
         if (!isOwner) {
           this.router.navigate(['/listings', id]);

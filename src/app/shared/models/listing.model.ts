@@ -1,7 +1,7 @@
 import { User } from './user.model';
 
 export interface Listing {
-  _id?: string;
+  _id: string;
   title: string;
   description: string;
   priceInSats: number;

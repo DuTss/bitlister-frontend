@@ -1,5 +1,5 @@
 <div class="auth-container">
-  <h2>Créer un compte (sans KYC)</h2>
+  <h2>Créer un compte</h2>
 
   @if (errorMessage) {
     <div class="error-banner">{{ errorMessage }}</div>
@@ -7,12 +7,25 @@
 
   <form (ngSubmit)="onSubmit()">
     <div class="form-group">
-      <label for="username">Nom d'utilisateur</label>
+      <label for="email">Adresse Email</label>
+      <input
+        type="email"
+        id="email"
+        [(ngModel)]="credentials.email"
+        name="email"
+        placeholder="pseudo@getalby.com"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="pseudo">Pseudo (nom public)</label>
       <input
         type="text"
-        id="username"
-        [(ngModel)]="credentials.username"
-        name="username"
+        id="pseudo"
+        [(ngModel)]="credentials.pseudo"
+        name="pseudo"
+        placeholder="Satoshi Nakamoto"
         required
       />
     </div>
@@ -24,6 +37,7 @@
         id="password"
         [(ngModel)]="credentials.password"
         name="password"
+        placeholder=""
         required
       />
     </div>
@@ -35,7 +49,7 @@
         id="lightningAddress"
         [(ngModel)]="credentials.lightningAddress"
         name="lightningAddress"
-        placeholder="pseudo@getalby.com"
+        placeholder="QR code ou adresse Lightning"
       />
     </div>
 

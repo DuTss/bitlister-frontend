@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ListingService } from '../../../core/services/listing.service';
 import { Listing } from '../../../shared/models/listing.model';
+import { AuthService } from '../../../core/services/auth.service';
+import { UserService } from '../../../core/services/user.service';
 
 @Component({
   selector: 'app-listing-list',
@@ -14,6 +16,8 @@ import { Listing } from '../../../shared/models/listing.model';
 })
 export class ListingList implements OnInit {
   private listingService = inject(ListingService);
+  private userService = inject(UserService);
+  public authService = inject(AuthService); // Modifié en 'public' pour être accessible dans le template HTML
 
   listings: Listing[] = [];
   loading = true;
@@ -25,7 +29,7 @@ export class ListingList implements OnInit {
 
   categories: string[] = [
     'Toutes',
-    'Électronique',
+    'Informatique',
     'Services',
     'Maison',
     'Divers'
@@ -67,5 +71,35 @@ export class ListingList implements OnInit {
     this.searchTerm = '';
     this.selectedCategory = 'Toutes';
     this.fetchListings();
+  }
+
+  // Vérifier si une annonce est en favori
+  isFavorite(listingId: string): boolean {
+    const user = this.authService.currentUser();
+    return user?.favorites?.includes(listingId) || false;
+  }
+
+  // Action de toggle
+  toggleFavorite(event: Event, listingId: string): void {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (!this.authService.isLoggedIn()) {
+      alert('Veuillez vous connecter pour ajouter des favoris.');
+      return;
+    }
+
+    this.userService.toggleFavorite(listingId).subscribe({
+      next: (res) => {
+        // Mettre à jour les favoris de l'utilisateur courant en local
+        const currentUser = this.authService.currentUser();
+        if (currentUser) {
+          this.authService.currentUser.set({
+            ...currentUser,
+            favorites: res.favorites
+          });
+        }
+      }
+    });
   }
 }

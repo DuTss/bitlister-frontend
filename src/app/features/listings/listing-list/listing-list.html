@@ -53,6 +53,15 @@
           <p class="description">{{ listing.description | slice:0:100 }}{{ listing.description.length > 100 ? '...' : '' }}</p>
           <div class="card-footer">
             <span class="location">📍 {{ listing.location || 'Non précisé' }}</span>
+            <button
+              type="button"
+              class="btn-fav"
+              [class.active]="isFavorite(listing._id)"
+              (click)="toggleFavorite($event, listing._id)"
+              title="Ajouter / Retirer des favoris"
+            >
+              {{ isFavorite(listing._id) ? '❤️' : '🤍' }}
+            </button>
           </div>
         </a>
       }

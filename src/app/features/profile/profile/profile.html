@@ -30,15 +30,15 @@
         </div>
 
         <div class="form-group">
-          <label for="username">Nom d'utilisateur</label>
+          <label for="pseudo">Nom d'utilisateur</label>
           <input
-            id="username"
+            id="pseudo"
             type="text"
-            formControlName="username"
+            formControlName="pseudo"
             class="form-control"
-            [class.is-invalid]="profileForm.get('username')?.invalid && profileForm.get('username')?.touched"
+            [class.is-invalid]="profileForm.get('pseudo')?.invalid && profileForm.get('pseudo')?.touched"
           />
-          @if (profileForm.get('username')?.invalid && profileForm.get('username')?.touched) {
+          @if (profileForm.get('pseudo')?.invalid && profileForm.get('pseudo')?.touched) {
             <span class="error-text">Le pseudo doit contenir au moins 3 caractères.</span>
           }
         </div>

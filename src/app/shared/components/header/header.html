@@ -11,7 +11,10 @@
       @if (authService.currentUser(); as user) {
         <a routerLink="/create-listing" class="btn-create">+ Déposer une annonce</a>
         <div class="user-menu">
-          <span class="user-badge">👤 {{ user.username }}</span>
+          <a routerLink="/my-listings" routerLinkActive="active">Mes annonces</a>
+          <a routerLink="/favorites" routerLinkActive="active">Favoris</a>
+          <a routerLink="/profile" routerLinkActive="active">Mon profil</a>
+          <span class="user-badge">👤 {{ user.pseudo }}</span>
           <button (click)="authService.logout()" class="btn-logout">Déconnexion</button>
         </div>
       } @else {

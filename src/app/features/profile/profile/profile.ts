@@ -31,9 +31,9 @@ export class Profile implements OnInit {
 
   private initForm(): void {
     this.profileForm = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(3)]],
+      pseudo: ['', [Validators.required, Validators.minLength(3)]],
       email: [{ value: '', disabled: true }], // L'email ne peut pas être modifié
-      lightningAddress: ['', [Validators.email]],
+      lightningAddress: [''], // Pas de Validators.email strict sur les adresses LN
       currentPassword: [''],
       newPassword: ['', [Validators.minLength(6)]]
     });
@@ -45,7 +45,7 @@ export class Profile implements OnInit {
       next: (profile) => {
         this.user = profile;
         this.profileForm.patchValue({
-          username: profile.username,
+          pseudo: profile.pseudo,
           email: profile.email,
           lightningAddress: profile.lightningAddress || ''
         });
@@ -70,9 +70,8 @@ export class Profile implements OnInit {
 
     const formValues = this.profileForm.getRawValue();
 
-    // Construction du payload avec nettoyage des valeurs vides
     const payload: any = {
-      username: formValues.username,
+      pseudo: formValues.pseudo,
       lightningAddress: formValues.lightningAddress
     };
 

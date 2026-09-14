@@ -15,7 +15,7 @@ export class Login {
   private router = inject(Router);
 
   credentials = {
-    username: '',
+    email: '',
     password: ''
   };
 

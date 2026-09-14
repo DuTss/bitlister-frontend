@@ -1,0 +1,38 @@
+<div class="container">
+  <h1>Mes Favoris</h1>
+
+  @if (loading) {
+    <div class="state-message">Chargement de vos favoris...</div>
+  } @else if (errorMessage) {
+    <div class="error-banner">{{ errorMessage }}</div>
+  } @else if (favorites.length === 0) {
+    <div class="state-message">
+      <p>Vous n'avez aucune annonce enregistrée en favoris.</p>
+      <a routerLink="/" class="btn-primary">Parcourir les annonces</a>
+    </div>
+  } @else {
+    <div class="grid">
+      @for (item of favorites; track item._id) {
+        <a [routerLink]="['/listings', item._id]" class="card">
+          <div class="card-header">
+            <span class="category-badge">{{ item.category }}</span>
+            <button
+              type="button"
+              class="btn-fav active"
+              (click)="removeFavorite($event, item._id)"
+              title="Retirer des favoris"
+            >
+              ❤️
+            </button>
+          </div>
+          <h3>{{ item.title }}</h3>
+          <p class="price">⚡ {{ item.priceInSats | number }} Sats</p>
+          <div class="card-footer">
+            <small>📍 {{ item.location }}</small>
+            <small>👤 {{ item.seller?.pseudo || 'Vendeur' }}</small>
+          </div>
+        </a>
+      }
+    </div>
+  }
+</div>

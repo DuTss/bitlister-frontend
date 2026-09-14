@@ -36,7 +36,16 @@ export class ListingService {
     return this.http.put<Listing>(`${this.apiUrl}/${id}`, listingData);
   }
 
-  deleteListing(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  getMyListings(): Observable<Listing[]> {
+    return this.http.get<Listing[]>(`${this.apiUrl}/mine`);
   }
+
+  updateStatus(id: string, status: 'ACTIVE' | 'SOLD' | 'ARCHIVED'): Observable<{ message: string; listing: Listing }> {
+    return this.http.patch<{ message: string; listing: Listing }>(`${this.apiUrl}/${id}/status`, { status });
+  }
+
+  deleteListing(id: string): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.apiUrl}/${id}`);
+  }
+
 }
