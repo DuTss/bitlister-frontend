@@ -36,8 +36,8 @@ export class UserService {
   }
 
   // Demander l'envoi du mail de modification de mot de passe
-  requestPasswordReset(): Observable<{ message: string }> {
-    return this.http.post<{ message: string }>(`${this.apiUrl}/request-password-reset`, {});
+  requestPasswordReset(email?: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/request-password-reset`, { email });
   }
 
   // Réinitialiser le mot de passe via le token reçu par mail (Route publique)

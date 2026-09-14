@@ -9,6 +9,8 @@ import { Register } from './features/auth/register/register';
 import { Profile } from './features/profile/profile/profile';
 import { authGuard } from './core/guards/auth.guard';
 import { FavoritesList } from './features/favorites/favorites-list/favorites-list';
+import { ResetPassword } from './features/auth/reset-password/reset-password';
+import { ForgotPassword } from './features/auth/forgot-password/forgot-password';
 
 export const routes: Routes = [
   { path: '', component: ListingList },
@@ -18,6 +20,8 @@ export const routes: Routes = [
   { path: 'listings/:id', component: ListingDetail },
   { path: 'login', component: Login },
   { path: 'register', component: Register },
+  { path: 'reset-password', component: ResetPassword },
+  { path: 'forgot-password', component: ForgotPassword },
   { path: 'profile', component: Profile, canActivate: [authGuard] },
   { path: 'favorites',component: FavoritesList, canActivate: [authGuard] },
   { path: '**', redirectTo: '' }
