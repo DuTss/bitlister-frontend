@@ -18,6 +18,12 @@
       </div>
     }
 
+    @if (emailSentMessage) {
+      <div class="alert alert-success">
+        {{ emailSentMessage }}
+      </div>
+    }
+
     <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="profile-form">
 
       <!-- Section Informations de base -->
@@ -67,33 +73,21 @@
         </div>
       </fieldset>
 
-      <!-- Section Sécurité / Mot de passe -->
+      <!-- Section Sécurité / Mot de passe par Email -->
       <fieldset class="form-section">
-        <legend>Changer de mot de passe (Optionnel)</legend>
+        <legend>Sécurité & Mot de passe</legend>
+        <p class="section-help">
+          Pour modifier ton mot de passe, un lien sécurisé de confirmation te sera envoyé directement par e-mail.
+        </p>
 
-        <div class="form-group">
-          <label for="currentPassword">Mot de passe actuel</label>
-          <input
-            id="currentPassword"
-            type="password"
-            formControlName="currentPassword"
-            class="form-control"
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="newPassword">Nouveau mot de passe</label>
-          <input
-            id="newPassword"
-            type="password"
-            formControlName="newPassword"
-            class="form-control"
-            [class.is-invalid]="profileForm.get('newPassword')?.invalid && profileForm.get('newPassword')?.touched"
-          />
-          @if (profileForm.get('newPassword')?.invalid && profileForm.get('newPassword')?.touched) {
-            <span class="error-text">Le nouveau mot de passe doit faire au moins 6 caractères.</span>
-          }
-        </div>
+        <button
+          type="button"
+          class="btn-secondary"
+          (click)="onRequestPasswordReset()"
+          [disabled]="sendingEmail"
+        >
+          {{ sendingEmail ? 'Envoi en cours...' : 'Recevoir le lien de modification par e-mail' }}
+        </button>
       </fieldset>
 
       <div class="form-actions">

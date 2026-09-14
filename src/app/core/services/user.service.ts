@@ -34,4 +34,14 @@ export class UserService {
   getFavorites(): Observable<Listing[]> {
     return this.http.get<Listing[]>(`${this.apiUrl}/favorites`);
   }
+
+  // Demander l'envoi du mail de modification de mot de passe
+  requestPasswordReset(): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/request-password-reset`, {});
+  }
+
+  // Réinitialiser le mot de passe via le token reçu par mail (Route publique)
+  resetPassword(payload: { token: string; newPassword: string }): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/reset-password`, payload);
+  }
 }

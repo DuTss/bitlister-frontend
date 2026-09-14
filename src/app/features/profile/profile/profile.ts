@@ -19,6 +19,10 @@ export class Profile implements OnInit {
   loading = true;
   submitting = false;
 
+  // Gestion de l'envoi de mail de mot de passe
+  sendingEmail = false;
+  emailSentMessage = '';
+
   successMessage = '';
   errorMessage = '';
 
@@ -33,9 +37,7 @@ export class Profile implements OnInit {
     this.profileForm = this.fb.group({
       pseudo: ['', [Validators.required, Validators.minLength(3)]],
       email: [{ value: '', disabled: true }], // L'email ne peut pas être modifié
-      lightningAddress: [''], // Pas de Validators.email strict sur les adresses LN
-      currentPassword: [''],
-      newPassword: ['', [Validators.minLength(6)]]
+      lightningAddress: ['']
     });
   }
 
@@ -58,6 +60,7 @@ export class Profile implements OnInit {
     });
   }
 
+  // Soumission pour le pseudo et l'adresse Lightning
   onSubmit(): void {
     if (this.profileForm.invalid) {
       this.profileForm.markAllAsTouched();
@@ -70,33 +73,38 @@ export class Profile implements OnInit {
 
     const formValues = this.profileForm.getRawValue();
 
-    const payload: any = {
+    const payload = {
       pseudo: formValues.pseudo,
       lightningAddress: formValues.lightningAddress
     };
-
-    if (formValues.newPassword) {
-      payload.currentPassword = formValues.currentPassword;
-      payload.newPassword = formValues.newPassword;
-    }
 
     this.userService.updateProfile(payload).subscribe({
       next: (res) => {
         this.successMessage = res.message;
         this.user = res.user;
         this.submitting = false;
-
-        // Réinitialisation des champs de mot de passe après succès
-        this.profileForm.patchValue({
-          currentPassword: '',
-          newPassword: ''
-        });
-        this.profileForm.get('currentPassword')?.setErrors(null);
-        this.profileForm.get('newPassword')?.setErrors(null);
       },
       error: (err) => {
         this.errorMessage = err.error?.message || 'Erreur lors de la mise à jour.';
         this.submitting = false;
+      }
+    });
+  }
+
+  // Déclencheur pour recevoir le lien de modification de mot de passe par e-mail
+  onRequestPasswordReset(): void {
+    this.sendingEmail = true;
+    this.emailSentMessage = '';
+    this.errorMessage = '';
+
+    this.userService.requestPasswordReset().subscribe({
+      next: (res) => {
+        this.emailSentMessage = res.message;
+        this.sendingEmail = false;
+      },
+      error: (err) => {
+        this.errorMessage = err.error?.message || "Erreur lors de l'envoi de l'email.";
+        this.sendingEmail = false;
       }
     });
   }

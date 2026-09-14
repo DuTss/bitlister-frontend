@@ -135,3 +135,58 @@ h2 {
   padding: 2rem;
   color: #6b7280;
 }
+
+/* Bouton secondaire pour la demande d'email */
+.btn-secondary {
+  background-color: transparent;
+  color: #1f2937;
+  border: 1px solid #d1d5db;
+  padding: 0.65rem 1.25rem;
+  border-radius: var(--radius-sm, 6px);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.btn-secondary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Texte d'explication de section */
+.section-help {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+/* Alertes de confirmation et d'erreur */
+.alert {
+  padding: 0.85rem 1.2rem;
+  border-radius: var(--radius-sm, 6px);
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.alert-success {
+  background-color: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #065f46;
+}
+
+.alert-error {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+}
