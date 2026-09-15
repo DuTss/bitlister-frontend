@@ -1,0 +1,32 @@
+<div class="modal-backdrop" (click)="onClose()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <header class="modal-header">
+      <h3>🛡️ Points d'échange neutres à {{ city }}</h3>
+      <button class="btn-close" (click)="onClose()">✕</button>
+    </header>
+
+    <div class="modal-body">
+      <p class="subtitle">
+        Lieux recommandés pour effectuer une transaction physique P2P et échanger vos Satoshis en toute sécurité.
+      </p>
+
+      @if (loading) {
+        <div class="loading-state">Recherche des lieux sécurisés autour de {{ city }}...</div>
+      } @else {
+        <div class="places-list">
+          @for (place of places; track place.name) {
+            <div class="place-card">
+              <div class="place-type">{{ place.type }}</div>
+              <strong class="place-name">{{ place.name }}</strong>
+              <span class="place-note">💡 {{ place.note }}</span>
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    <footer class="modal-footer">
+      <button class="btn-primary" (click)="onClose()">Fermer</button>
+    </footer>
+  </div>
+</div>

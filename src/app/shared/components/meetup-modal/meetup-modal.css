@@ -1,0 +1,113 @@
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-card {
+  background: var(--bg-card, #ffffff);
+  border-radius: var(--radius-md, 10px);
+  max-width: 520px;
+  width: 100%;
+  box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.15));
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border-color, #e5e7eb);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-main, #111827);
+  margin: 0;
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: var(--text-muted, #6b7280);
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: var(--text-muted, #6b7280);
+  margin-bottom: 1.25rem;
+  line-height: 1.4;
+}
+
+.loading-state {
+  text-align: center;
+  padding: 2rem 0;
+  color: var(--text-muted, #6b7280);
+  font-style: italic;
+}
+
+.places-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.place-card {
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: var(--radius-sm, 6px);
+  padding: 0.85rem 1rem;
+  background-color: var(--bg-page, #f8f9fa);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.place-type {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--primary-orange, #f7931a);
+}
+
+.place-name {
+  font-size: 0.95rem;
+  color: var(--text-main, #111827);
+}
+
+.place-note {
+  font-size: 0.8rem;
+  color: var(--text-muted, #6b7280);
+}
+
+.modal-footer {
+  padding: 1rem 1.5rem;
+  background-color: var(--bg-page, #f8f9fa);
+  border-top: 1px solid var(--border-color, #e5e7eb);
+  text-align: right;
+}
+
+.btn-primary {
+  background-color: var(--primary-orange, #f7931a);
+  color: #ffffff;
+  border: none;
+  padding: 0.5rem 1.25rem;
+  border-radius: var(--radius-sm, 6px);
+  font-weight: 600;
+  cursor: pointer;
+}
