@@ -6,11 +6,12 @@ import { AuthService } from '../../../core/services/auth.service';
 import { Listing } from '../../../shared/models/listing.model';
 import { SatsToEurPipe } from '../../../shared/pipes/sats-to-eur.pipe';
 import { SatsToBtcPipe } from '../../../shared/pipes/sats-to-btc.pipe';
+import { MeetupModalComponent } from '../../../shared/components/meetup-modal/meetup-modal';
 
 @Component({
   selector: 'app-listing-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, SatsToEurPipe, SatsToBtcPipe],
+  imports: [CommonModule, RouterLink, SatsToEurPipe, SatsToBtcPipe, MeetupModalComponent],
   templateUrl: './listing-detail.html',
   styleUrl: './listing-detail.css'
 })
@@ -20,6 +21,7 @@ export class ListingDetail implements OnInit {
   private listingService = inject(ListingService);
   private authService = inject(AuthService);
 
+  showMeetupModal = false;
   listing: Listing | null = null;
   loading = true;
   errorMessage = '';

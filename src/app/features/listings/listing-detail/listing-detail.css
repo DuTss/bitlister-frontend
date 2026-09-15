@@ -207,3 +207,30 @@
 .separator {
   color: #d1d5db;
 }
+
+.location-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.btn-meetup-trigger {
+  background-color: var(--bg-secondary, #f3f4f6);
+  color: var(--text-main, #374151);
+  border: 1px solid var(--border-color, #d1d5db);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-sm, 6px);
+  font-size: 0.825rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.btn-meetup-trigger:hover {
+  background-color: #e5e7eb;
+  border-color: var(--primary-orange, #f7931a);
+  color: var(--primary-orange, #f7931a);
+}

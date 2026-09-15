@@ -37,7 +37,17 @@
         <h2>Informations Vendeur</h2>
         <div class="seller-info">
           <p><strong>Vendeur :</strong> {{ listing.seller?.pseudo || 'Anonyme' }}</p>
-          <p><strong>Localisation :</strong> 📍 {{ listing.location }}</p>
+
+          <div class="location-row">
+            <p><strong>Localisation :</strong> 📍 {{ listing.location }}</p>
+
+            <!-- Bouton pour ouvrir la modale des points neutres -->
+            @if (listing.location) {
+              <button type="button" class="btn-meetup-trigger" (click)="showMeetupModal = true">
+                🛡️ Voir les lieux d'échange sécurisés
+              </button>
+            }
+          </div>
 
           @if (listing.seller?.lightningAddress) {
             <div class="lightning-box">
@@ -57,5 +67,13 @@
         </footer>
       }
     </article>
+  }
+
+  <!-- Modale des Points de Rendez-Vous Neutres -->
+  @if (showMeetupModal && listing?.location) {
+    <app-meetup-modal
+      [city]="listing!.location"
+      (close)="showMeetupModal = false">
+    </app-meetup-modal>
   }
 </div>
