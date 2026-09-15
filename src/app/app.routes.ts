@@ -16,6 +16,8 @@ import { NotFound } from './pages/not-found/not-found';
 import { Terms } from './pages/terms/terms';
 import { Privacy } from './pages/privacy/privacy';
 import { About } from './pages/about/about';
+import { Chat } from './features/chat/chat';
+
 
 export const routes: Routes = [
   { path: '', component: ListingList },
@@ -33,6 +35,8 @@ export const routes: Routes = [
   { path: 'about', component: About },
   { path: 'profile', component: Profile, canActivate: [authGuard] },
   { path: 'favorites',component: FavoritesList, canActivate: [authGuard] },
+  { path: 'chat/:roomId', component: Chat, canActivate: [authGuard] },
+  { path: 'chat', component: Chat, canActivate: [authGuard]},
   { path: '**', component: NotFound }
   // { path: '**', redirectTo: '' }
 ];

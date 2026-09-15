@@ -60,6 +60,10 @@
         </div>
       </section>
 
+      <a [routerLink]="['/chat', listing._id]" class="btn-contact-seller">
+        💬 Contacter le vendeur (Chat E2EE)
+      </a>
+
       <button type="button" class="btn-lightning-trigger" (click)="showLightningModal = true">
   ⚡ Générer un QR Code de règlement
 </button>
