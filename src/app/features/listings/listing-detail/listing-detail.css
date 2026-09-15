@@ -234,3 +234,32 @@
   border-color: var(--primary-orange, #f7931a);
   color: var(--primary-orange, #f7931a);
 }
+
+
+.btn-lightning-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.75rem 1.25rem;
+  background-color: var(--primary-orange, #f7931a);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-sm, 6px);
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  box-shadow: 0 2px 4px rgba(247, 147, 26, 0.2);
+}
+
+.btn-lightning-trigger:hover {
+  background-color: #e08213;
+  transform: translateY(-1px);
+}
+
+.btn-lightning-trigger:active {
+  transform: translateY(0);
+}

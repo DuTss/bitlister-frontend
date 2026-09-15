@@ -60,6 +60,20 @@
         </div>
       </section>
 
+      <button type="button" class="btn-lightning-trigger" (click)="showLightningModal = true">
+  ⚡ Générer un QR Code de règlement
+</button>
+
+<!-- Modale de Paiement Lightning -->
+@if (showLightningModal && listing) {
+  <app-lightning-modal
+    [amountInSats]="listing.priceInSats"
+    [title]="'Achat : ' + listing.title"
+    (close)="showLightningModal = false"
+    (paid)="onLightningPaymentSuccess($event)">
+  </app-lightning-modal>
+}
+
       @if (isOwner) {
         <footer class="detail-actions">
           <a [routerLink]="['/listings', listing._id, 'edit']" class="btn-edit">Modifier</a>

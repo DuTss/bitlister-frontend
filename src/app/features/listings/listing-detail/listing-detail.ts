@@ -7,11 +7,12 @@ import { Listing } from '../../../shared/models/listing.model';
 import { SatsToEurPipe } from '../../../shared/pipes/sats-to-eur.pipe';
 import { SatsToBtcPipe } from '../../../shared/pipes/sats-to-btc.pipe';
 import { MeetupModalComponent } from '../../../shared/components/meetup-modal/meetup-modal';
+import { LightningModalComponent } from '../../../shared/components/lightning-modal/lightning-modal';
 
 @Component({
   selector: 'app-listing-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, SatsToEurPipe, SatsToBtcPipe, MeetupModalComponent],
+  imports: [CommonModule, RouterLink, SatsToEurPipe, SatsToBtcPipe, MeetupModalComponent, LightningModalComponent],
   templateUrl: './listing-detail.html',
   styleUrl: './listing-detail.css'
 })
@@ -21,6 +22,7 @@ export class ListingDetail implements OnInit {
   private listingService = inject(ListingService);
   private authService = inject(AuthService);
 
+  showLightningModal = false;
   showMeetupModal = false;
   listing: Listing | null = null;
   loading = true;
@@ -64,6 +66,22 @@ export class ListingDetail implements OnInit {
         },
         error: (err) => {
           alert(err.error?.message || 'Erreur lors de la suppression');
+        }
+      });
+    }
+  }
+
+  onLightningPaymentSuccess(paymentHash: string): void {
+    console.log('Paiement validé avec le hash :', paymentHash);
+    // Optionnel : afficher un message de succès ou mettre à jour le statut
+    if (this.listing) {
+      this.listingService.updateStatus(this.listing._id, 'SOLD').subscribe({
+        next: () => {
+          alert('Paiement réussi ! L\'annonce est maintenant marquée comme vendue.');
+          this.router.navigate(['/']);
+        },
+        error: (err) => {
+          alert(err.error?.message || 'Erreur lors de la mise à jour du statut de l\'annonce');
         }
       });
     }

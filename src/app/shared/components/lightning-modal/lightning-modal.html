@@ -1,0 +1,48 @@
+<div class="modal-backdrop" (click)="onClose()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <header class="modal-header">
+      <h3>⚡ Facture Lightning</h3>
+      <button class="btn-close" (click)="onClose()">✕</button>
+    </header>
+
+    <div class="modal-body">
+      @if (loading) {
+        <div class="status-box">
+          <p class="loading-text">Génération de la facture Lightning...</p>
+        </div>
+      } @else if (isPaid) {
+        <div class="status-box success">
+          <span class="success-icon">✅</span>
+          <h4>Paiement confirmé !</h4>
+          <p>Les {{ amountInSats | number }} Satoshis ont bien été reçus.</p>
+          <button class="btn-primary" (click)="onClose()">Fermer</button>
+        </div>
+      } @else {
+        <div class="invoice-container">
+          <div class="amount-badge">
+            ⚡ <strong>{{ amountInSats | number }}</strong> Satoshis
+          </div>
+
+          @if (qrCodeDataUrl) {
+            <div class="qr-code-wrapper">
+              <img [src]="qrCodeDataUrl" alt="QR Code Facture Lightning" class="qr-code-img" />
+            </div>
+          }
+
+          <p class="instruction">Scannez ce QR Code avec votre wallet Lightning (Alby, Phoenix, Wallet of Satoshi, etc.)</p>
+
+          <div class="copy-box">
+            <input type="text" [value]="paymentRequest" readonly class="invoice-input" />
+            <button class="btn-copy" (click)="copyInvoice()">
+              {{ copied ? 'Copié !' : 'Copier' }}
+            </button>
+          </div>
+
+          <div class="waiting-indicator">
+            <span class="pulse-dot"></span> En attente du règlement en direct...
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>
