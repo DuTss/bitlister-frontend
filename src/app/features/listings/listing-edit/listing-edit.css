@@ -44,6 +44,37 @@
   border-color: var(--primary-orange);
 }
 
+/* Calculateur dynamique Satoshis / EUR */
+.price-calculator-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 600px) {
+  .price-calculator-group {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+
+/* Aperçu de la valeur BTC */
+.btc-preview {
+  margin-top: -0.4rem;
+  margin-bottom: 1.2rem;
+  padding: 0.6rem 0.8rem;
+  background-color: #f9fafb;
+  border-left: 3px solid var(--primary-orange);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.btc-preview strong {
+  font-family: monospace;
+  color: var(--text-main);
+}
+
 .field-error {
   color: #dc3545;
   font-size: 0.8rem;

@@ -49,3 +49,31 @@ input, select, textarea {
   border-radius: 4px;
   margin-bottom: 1rem;
 }
+
+.price-calculator-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 600px) {
+  .price-calculator-group {
+    grid-template-columns: 1fr;
+  }
+}
+
+.btc-preview {
+  margin-top: -0.5rem;
+  margin-bottom: 1.2rem;
+  padding: 0.5rem 0.8rem;
+  background-color: #f9fafb;
+  border-left: 3px solid var(--primary-orange, #f7931a);
+  border-radius: 4px;
+  font-size: 0.85rem;
+  color: #4b5563;
+}
+
+.btc-preview strong {
+  font-family: monospace;
+  color: #111827;
+}

@@ -37,18 +37,43 @@
           </select>
         </div>
 
-        <div class="form-group">
-          <label for="priceInSats">Prix en Satoshis (Sats)</label>
-          <input
-            type="number"
-            id="priceInSats"
-            formControlName="priceInSats"
-            placeholder="ex: 50000"
-          />
-          @if (editForm.get('priceInSats')?.touched && editForm.get('priceInSats')?.invalid) {
-            <span class="field-error">Veuillez indiquer un prix valide supérieur à 0.</span>
-          }
+        <!-- Groupe Calculateur de Prix Dynamique -->
+        <div class="price-calculator-group">
+          <div class="form-group">
+            <label for="priceInSats">Prix en Satoshis (Sats) *</label>
+            <input
+              type="number"
+              id="priceInSats"
+              formControlName="priceInSats"
+              placeholder="ex: 50000"
+            />
+            @if (editForm.get('priceInSats')?.touched && editForm.get('priceInSats')?.invalid) {
+              <span class="field-error">Veuillez indiquer un prix valide supérieur à 0.</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="priceInEur">Équivalent indicatif (en €)</label>
+            <input
+              type="number"
+              id="priceInEur"
+              [value]="priceInEur"
+              (input)="onEurInput($event)"
+              placeholder="ex: 42.50"
+              step="0.01"
+              min="0"
+            />
+          </div>
         </div>
+
+        <!-- Aperçu de la valeur BTC -->
+        @if (editForm.get('priceInSats')?.value; as sats) {
+          @if (sats > 0) {
+            <div class="btc-preview">
+              <span>Valeur exacte en Bitcoin : <strong>{{ sats | satsToBtc }}</strong></span>
+            </div>
+          }
+        }
 
         <div class="form-group">
           <label for="location">Localisation</label>
