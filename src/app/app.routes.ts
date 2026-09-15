@@ -12,6 +12,10 @@ import { FavoritesList } from './features/favorites/favorites-list/favorites-lis
 import { ResetPassword } from './features/auth/reset-password/reset-password';
 import { ForgotPassword } from './features/auth/forgot-password/forgot-password';
 import { VerifyEmail } from './features/auth/verify-email/verify-email';
+import { NotFound } from './pages/not-found/not-found';
+import { Terms } from './pages/terms/terms';
+import { Privacy } from './pages/privacy/privacy';
+import { About } from './pages/about/about';
 
 export const routes: Routes = [
   { path: '', component: ListingList },
@@ -24,7 +28,11 @@ export const routes: Routes = [
   { path: 'verify-email', component: VerifyEmail },
   { path: 'reset-password', component: ResetPassword },
   { path: 'forgot-password', component: ForgotPassword },
+  { path: 'terms', component: Terms },
+  { path: 'privacy', component: Privacy },
+  { path: 'about', component: About },
   { path: 'profile', component: Profile, canActivate: [authGuard] },
   { path: 'favorites',component: FavoritesList, canActivate: [authGuard] },
-  { path: '**', redirectTo: '' }
+  { path: '**', component: NotFound }
+  // { path: '**', redirectTo: '' }
 ];
