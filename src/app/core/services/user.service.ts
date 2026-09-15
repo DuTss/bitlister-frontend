@@ -44,4 +44,8 @@ export class UserService {
   resetPassword(payload: { token: string; newPassword: string }): Observable<{ message: string }> {
     return this.http.post<{ message: string }>(`${this.apiUrl}/reset-password`, payload);
   }
+
+  verifyEmail(token: string) {
+    return this.http.post(`${this.apiUrl}/verify-email`, { token });
+  }
 }

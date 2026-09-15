@@ -11,6 +11,7 @@ import { authGuard } from './core/guards/auth.guard';
 import { FavoritesList } from './features/favorites/favorites-list/favorites-list';
 import { ResetPassword } from './features/auth/reset-password/reset-password';
 import { ForgotPassword } from './features/auth/forgot-password/forgot-password';
+import { VerifyEmail } from './features/auth/verify-email/verify-email';
 
 export const routes: Routes = [
   { path: '', component: ListingList },
@@ -20,6 +21,7 @@ export const routes: Routes = [
   { path: 'listings/:id', component: ListingDetail },
   { path: 'login', component: Login },
   { path: 'register', component: Register },
+  { path: 'verify-email', component: VerifyEmail },
   { path: 'reset-password', component: ResetPassword },
   { path: 'forgot-password', component: ForgotPassword },
   { path: 'profile', component: Profile, canActivate: [authGuard] },

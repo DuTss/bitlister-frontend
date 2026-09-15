@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserService } from '../../../core/services/user.service';
 import { User } from '../../../shared/models/user.model';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -14,6 +15,7 @@ import { User } from '../../../shared/models/user.model';
 export class Profile implements OnInit {
   private fb = inject(FormBuilder);
   private userService = inject(UserService);
+  private authService = inject(AuthService);
 
   user: User | null = null;
   loading = true;
@@ -83,6 +85,15 @@ export class Profile implements OnInit {
         this.successMessage = res.message;
         this.user = res.user;
         this.submitting = false;
+
+        // Mise à jour de la navbar et du stockage local en direct
+        this.authService.updateCurrentUser(res.user);
+
+        // Réinitialisation des champs de mot de passe
+        this.profileForm.patchValue({
+          currentPassword: '',
+          newPassword: ''
+        });
       },
       error: (err) => {
         this.errorMessage = err.error?.message || 'Erreur lors de la mise à jour.';

@@ -165,3 +165,45 @@
 .error-banner {
   color: #dc3545;
 }
+
+
+.price-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-top: 0.8rem;
+}
+
+.price-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.price-value {
+  color: var(--primary-orange, #f7931a);
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.price-conversions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  color: #6b7280;
+}
+
+.eur-value {
+  font-weight: 600;
+  color: #374151;
+}
+
+.btc-value {
+  font-family: monospace;
+  color: #4b5563;
+}
+
+.separator {
+  color: #d1d5db;
+}

@@ -1,0 +1,19 @@
+<div class="verify-container">
+  @if (loading) {
+    <p>Vérification de votre compte en cours...</p>
+  }
+
+  @if (successMessage) {
+    <div class="alert alert-success">
+      <p>{{ successMessage }}</p>
+      <a routerLink="/login" class="btn">Se connecter</a>
+    </div>
+  }
+
+  @if (errorMessage) {
+    <div class="alert alert-danger">
+      <p>{{ errorMessage }}</p>
+      <a routerLink="/register" class="btn">Retour à l'inscription</a>
+    </div>
+  }
+</div>

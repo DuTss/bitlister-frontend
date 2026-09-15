@@ -14,9 +14,17 @@
       <header class="detail-header">
         <span class="category-badge">{{ listing.category }}</span>
         <h1 class="title">{{ listing.title }}</h1>
+
         <div class="price-container">
-          <span class="price-label">Prix P2P</span>
-          <span class="price-value">⚡ {{ listing.priceInSats | number }} Satoshis</span>
+          <span class="price-label">Prix P2P :</span>
+          <div class="price-main">
+            <span class="price-value">⚡ {{ listing.priceInSats | number }} Satoshis</span>
+            <div class="price-conversions">
+              <span class="eur-value">≈ {{ listing.priceInSats | satsToEur | number:'1.2-2' }} €</span>
+              <span class="separator">•</span>
+              <span class="btc-value">{{ listing.priceInSats | satsToBtc }}</span>
+            </div>
+          </div>
         </div>
       </header>
 

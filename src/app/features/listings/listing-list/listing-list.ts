@@ -6,18 +6,20 @@ import { ListingService } from '../../../core/services/listing.service';
 import { Listing } from '../../../shared/models/listing.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { UserService } from '../../../core/services/user.service';
+import { SatsToEurPipe } from '../../../shared/pipes/sats-to-eur.pipe';
+import { SatsToBtcPipe } from '../../../shared/pipes/sats-to-btc.pipe';
 
 @Component({
   selector: 'app-listing-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, SatsToEurPipe, SatsToBtcPipe],
   templateUrl: './listing-list.html',
   styleUrl: './listing-list.css'
 })
 export class ListingList implements OnInit {
   private listingService = inject(ListingService);
   private userService = inject(UserService);
-  public authService = inject(AuthService); // Modifié en 'public' pour être accessible dans le template HTML
+  public authService = inject(AuthService);
 
   listings: Listing[] = [];
   loading = true;
@@ -73,13 +75,11 @@ export class ListingList implements OnInit {
     this.fetchListings();
   }
 
-  // Vérifier si une annonce est en favori
   isFavorite(listingId: string): boolean {
     const user = this.authService.currentUser();
     return user?.favorites?.includes(listingId) || false;
   }
 
-  // Action de toggle
   toggleFavorite(event: Event, listingId: string): void {
     event.preventDefault();
     event.stopPropagation();
@@ -91,7 +91,6 @@ export class ListingList implements OnInit {
 
     this.userService.toggleFavorite(listingId).subscribe({
       next: (res) => {
-        // Mettre à jour les favoris de l'utilisateur courant en local
         const currentUser = this.authService.currentUser();
         if (currentUser) {
           this.authService.currentUser.set({

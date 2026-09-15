@@ -61,3 +61,15 @@ input {
   text-decoration: none;
   font-weight: bold;
 }
+
+.info-banner {
+  background-color: #e3f2fd;
+  color: #0d47a1;
+  border: 1px solid #bbdefb;
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  text-align: center;
+}

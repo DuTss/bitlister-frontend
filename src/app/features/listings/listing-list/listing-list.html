@@ -45,10 +45,25 @@
     <div class="listings-grid">
       @for (listing of listings; track listing._id) {
         <a [routerLink]="['/listings', listing._id]" class="listing-card">
-          <div class="card-header">
+          <!-- <div class="card-header">
             <span class="category-badge">{{ listing.category }}</span>
-            <span class="price-badge">{{ listing.priceInSats | number }} Sats</span>
-          </div>
+            <div class="price-container">
+              <span class="price-badge">{{ listing.priceInSats | number }} Sats</span>
+              <small class="eur-badge">≈ {{ listing.priceInSats | satsToEur | number:'1.2-2' }} €</small>
+            </div>
+          </div> -->
+          <div class="card-header">
+  <span class="category-badge">{{ listing.category }}</span>
+
+  <div class="price-container">
+    <span class="price-badge">{{ listing.priceInSats | number }} Sats</span>
+    <div class="price-sub">
+      <span class="eur-badge">≈ {{ listing.priceInSats | satsToEur | number:'1.2-2' }} €</span>
+      <span>•</span>
+      <span class="btc-badge">{{ listing.priceInSats | satsToBtc }}</span>
+    </div>
+  </div>
+</div>
           <h3>{{ listing.title }}</h3>
           <p class="description">{{ listing.description | slice:0:100 }}{{ listing.description.length > 100 ? '...' : '' }}</p>
           <div class="card-footer">

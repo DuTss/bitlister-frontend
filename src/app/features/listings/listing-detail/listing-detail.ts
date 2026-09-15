@@ -4,11 +4,13 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ListingService } from '../../../core/services/listing.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { Listing } from '../../../shared/models/listing.model';
+import { SatsToEurPipe } from '../../../shared/pipes/sats-to-eur.pipe';
+import { SatsToBtcPipe } from '../../../shared/pipes/sats-to-btc.pipe';
 
 @Component({
   selector: 'app-listing-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, SatsToEurPipe, SatsToBtcPipe],
   templateUrl: './listing-detail.html',
   styleUrl: './listing-detail.css'
 })

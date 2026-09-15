@@ -39,14 +39,32 @@ export class AuthService {
     return !!this.getToken();
   }
 
+  // Méthode à ajouter pour rafraîchir le signal et le LocalStorage
+  updateCurrentUser(updatedUser: User): void {
+    localStorage.setItem('user', JSON.stringify(updatedUser));
+    this.currentUser.set(updatedUser);
+  }
+
   private handleAuthSuccess(res: AuthResponse): void {
     localStorage.setItem('token', res.token);
     localStorage.setItem('user', JSON.stringify(res.user));
     this.currentUser.set(res.user);
   }
 
-  private getUserFromStorage(): User | null {
+  private getUserFromStorage(): any {
     const userJson = localStorage.getItem('user');
-    return userJson ? JSON.parse(userJson) : null;
+
+    // Si la clé n'existe pas, vaut null ou vaut la chaîne "undefined"
+    if (!userJson || userJson === 'undefined') {
+      return null;
+    }
+
+    try {
+      return JSON.parse(userJson);
+    } catch (e) {
+      console.error('Erreur lors du parse du user depuis le localStorage:', e);
+      localStorage.removeItem('user'); // Nettoyage de la valeur corrompue
+      return null;
+    }
   }
 }

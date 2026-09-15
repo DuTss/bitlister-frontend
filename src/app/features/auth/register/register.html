@@ -19,6 +19,18 @@
     </div>
 
     <div class="form-group">
+  <label for="confirmEmail">Confirmer l'adresse email</label>
+  <input
+    id="confirmEmail"
+    type="email"
+    name="confirmEmail"
+    [(ngModel)]="credentials.confirmEmail"
+    required
+    class="form-control"
+  />
+</div>
+
+    <div class="form-group">
       <label for="pseudo">Pseudo (nom public)</label>
       <input
         type="text"

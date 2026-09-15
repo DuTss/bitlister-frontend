@@ -1,6 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
@@ -10,9 +10,12 @@ import { AuthService } from '../../../core/services/auth.service';
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
-export class Login {
+export class Login implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
+
+  infoMessage = '';
 
   credentials = {
     email: '',
@@ -20,6 +23,12 @@ export class Login {
   };
 
   errorMessage = '';
+
+  ngOnInit(): void {
+    if (this.route.snapshot.queryParamMap.get('registered') === 'true') {
+      this.infoMessage = 'Un e-mail de confirmation vous a été envoyé. Veuillez cliquer sur le lien reçu pour activer votre compte avant de vous connecter.';
+    }
+  }
 
   onSubmit(): void {
     this.authService.login(this.credentials).subscribe({
