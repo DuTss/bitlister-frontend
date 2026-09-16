@@ -71,6 +71,19 @@ export class ListingDetail implements OnInit {
     }
   }
 
+  contactSeller(listing: any): void {
+    // 1. Définir un nom de room unique (ex: ID de l'annonce)
+    const roomId = listing._id;
+
+    // 2. Récupérer l'ID du vendeur (destinataire)
+    const sellerId = listing.userId; // ou listing.seller._id selon ton modèle
+
+    // 3. Rediriger vers la route du chat avec le recipientId en Query Param
+    this.router.navigate(['/chat', roomId], {
+      queryParams: { recipientId: sellerId }
+    });
+  }
+
   onLightningPaymentSuccess(paymentHash: string): void {
     console.log('Paiement validé avec le hash :', paymentHash);
     // Optionnel : afficher un message de succès ou mettre à jour le statut
