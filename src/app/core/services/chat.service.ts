@@ -5,7 +5,9 @@ import { Observable } from 'rxjs';
 export interface EncryptedMessage {
   chatRoomId: string;
   senderId: string;
-  encryptedContent: string;
+  recipientId: string;
+  encryptedForRecipient: string;
+  encryptedForSender: string;
   timestamp: Date;
 }
 
@@ -22,12 +24,12 @@ export class ChatService {
 
   // Rejoindre un canal de discussion (Room)
   joinRoom(chatRoomId: string): void {
-    this.socket.emit('join_chat', chatRoomId);
+    this.socket.emit('joinRoom', chatRoomId);
   }
 
   // Envoyer un message chiffré
-  sendMessage(messageData: EncryptedMessage): void {
-    this.socket.emit('send_message', messageData);
+  sendMessage(message: EncryptedMessage): void {
+    this.socket.emit('sendMessage', message);
   }
 
   // Envoyer sa clé publique dans la room
@@ -61,7 +63,7 @@ export class ChatService {
   // Écouter les messages entrants
   onReceiveMessage(): Observable<EncryptedMessage> {
     return new Observable((observer) => {
-      this.socket.on('receive_message', (data: EncryptedMessage) => {
+      this.socket.on('receiveMessage', (data: EncryptedMessage) => {
         observer.next(data);
       });
     });

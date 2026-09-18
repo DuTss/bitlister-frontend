@@ -71,21 +71,24 @@ export class ListingDetail implements OnInit {
     }
   }
 
-  contactSeller(listing: any): void {
-    // 1. Définir un nom de room unique (ex: ID de l'annonce)
-    const roomId = listing._id;
+contactSeller(listing: any): void {
+  const roomId = listing._id;
 
-    // 2. Récupérer l'ID du vendeur (destinataire)
-    const sellerId = listing.userId; // ou listing.seller._id selon ton modèle
+  // Sécurité : extrait l'ID que seller soit un string OU un objet
+  const sellerId = typeof listing.seller === 'object' ? listing.seller?._id : listing.seller;
 
-    // 3. Rediriger vers la route du chat avec le recipientId en Query Param
-    this.router.navigate(['/chat', roomId], {
-      queryParams: { recipientId: sellerId }
-    });
+  if (!sellerId) {
+    console.error('❌ Impossible de contacter le vendeur : sellerId introuvable dans le listing !', listing);
+    return;
   }
 
+  // Redirection avec le recipientId garanti sous forme de string
+  this.router.navigate(['/chat', roomId], {
+    queryParams: { recipientId: sellerId }
+  });
+}
+
   onLightningPaymentSuccess(paymentHash: string): void {
-    console.log('Paiement validé avec le hash :', paymentHash);
     // Optionnel : afficher un message de succès ou mettre à jour le statut
     if (this.listing) {
       this.listingService.updateStatus(this.listing._id, 'SOLD').subscribe({

@@ -19,6 +19,51 @@ export class CryptoService {
     );
   }
 
+  // Sauvegarder la clé privée dans IndexedDB
+async savePrivateKey(userId: string, key: CryptoKey): Promise<void> {
+  const exported = await window.crypto.subtle.exportKey('pkcs8', key);
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open('BitListerCrypto', 1);
+    request.onupgradeneeded = () => request.result.createObjectStore('keys');
+    request.onsuccess = () => {
+      const db = request.result;
+      const tx = db.transaction('keys', 'readwrite');
+      tx.objectStore('keys').put(exported, `priv_${userId}`);
+      tx.oncomplete = () => resolve();
+    };
+    request.onerror = () => reject(request.error);
+  });
+}
+
+// Charger la clé privée depuis IndexedDB
+async loadPrivateKey(userId: string): Promise<CryptoKey | null> {
+  return new Promise((resolve) => {
+    const request = indexedDB.open('BitListerCrypto', 1);
+    request.onupgradeneeded = () => request.result.createObjectStore('keys');
+    request.onsuccess = async () => {
+      const db = request.result;
+      const tx = db.transaction('keys', 'readonly');
+      const getReq = tx.objectStore('keys').get(`priv_${userId}`);
+      getReq.onsuccess = async () => {
+        if (!getReq.result) return resolve(null);
+        try {
+          const key = await window.crypto.subtle.importKey(
+            'pkcs8',
+            getReq.result,
+            { name: 'RSA-OAEP', hash: 'SHA-256' },
+            true,
+            ['decrypt']
+          );
+          resolve(key);
+        } catch {
+          resolve(null);
+        }
+      };
+    };
+    request.onerror = () => resolve(null);
+  });
+}
+
   // 2. Exporter une clé publique en format String (pour l'envoyer au correspondant)
   async exportPublicKey(key: CryptoKey): Promise<string> {
     const exported = await window.crypto.subtle.exportKey('spki', key);
@@ -68,4 +113,5 @@ export class CryptoService {
     const decoder = new TextDecoder();
     return decoder.decode(decrypted);
   }
+
 }

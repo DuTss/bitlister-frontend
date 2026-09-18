@@ -1,0 +1,18 @@
+<div class="chat-list-container">
+  <h2>Vos Conversations P2P</h2>
+
+  <div *ngIf="conversations.length === 0" class="empty-state">
+    Aucune discussion en cours.
+  </div>
+
+  <div
+    *ngFor="let conv of conversations"
+    class="conversation-card"
+    (click)="openChat(conv)">
+
+    <div class="conv-info">
+      <strong>Discussion #{{ conv._id }}</strong>
+      <small>{{ conv.lastTimestamp | date:'short' }}</small>
+    </div>
+  </div>
+</div>

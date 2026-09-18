@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environnement';
 import { AuthResponse, User } from '../../shared/models/user.model';
+import { CryptoService } from './crypto.service';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +12,7 @@ import { AuthResponse, User } from '../../shared/models/user.model';
 export class AuthService {
   private http = inject(HttpClient);
   private apiUrl = `${environment.apiUrl}/auth`;
+  private CryptoService = inject(CryptoService)
 
   currentUser = signal<User | null>(this.getUserFromStorage());
 
@@ -67,4 +70,21 @@ export class AuthService {
       return null;
     }
   }
+
+  async registerPublicKey(userId: string): Promise<void> {
+  try {
+    // 1. Génération de la paire de clés
+    const keyPair = await this.CryptoService.generateKeyPair();
+    const publicKeyPem = await this.CryptoService.exportPublicKey(keyPair.publicKey);
+
+    // 2. Envoi au backend
+    await firstValueFrom(
+      this.http.put(`http://localhost:3000/api/users/${userId}/public-key`, {
+        publicKey: publicKeyPem
+      })
+    );
+  } catch (err) {
+    console.error('❌ Erreur lors de l\'enregistrement de la clé publique :', err);
+  }
+}
 }

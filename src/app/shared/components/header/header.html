@@ -13,11 +13,11 @@
         <div class="user-menu">
           <a routerLink="/my-listings" routerLinkActive="active">Mes annonces</a>
           <!-- Nouveau lien de messagerie -->
-          <a routerLink="/chat/general" routerLinkActive="active">💬 Messages</a>
+          <a routerLink="/messages" routerLinkActive="active">💬 Messages</a>
           <a routerLink="/favorites" routerLinkActive="active">Favoris</a>
           <a routerLink="/profile" routerLinkActive="active">Mon profil</a>
           <span class="user-badge">👤 {{ user.pseudo }}</span>
-          <button (click)="authService.logout()" class="btn-logout">Déconnexion</button>
+          <button (click)="authService.logout()" class="btn-logout" routerLink="/">Déconnexion</button>
         </div>
       } @else {
         <a routerLink="/login" class="btn-link">Connexion</a>

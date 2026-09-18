@@ -1,12 +1,13 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+
 import { AuthService } from '../../core/services/auth.service';
 import { CryptoService } from '../../core/services/crypto.service';
 import { ChatService, EncryptedMessage } from '../../core/services/chat.service';
-import { HttpClient } from '@angular/common/http';
 
 interface DisplayMessage {
   senderId: string;
@@ -28,129 +29,158 @@ export class Chat implements OnInit, OnDestroy {
   private chatService = inject(ChatService);
   private route = inject(ActivatedRoute);
   private http = inject(HttpClient);
+  private ngZone = inject(NgZone); // Garantit le rafraîchissement Angular de l'UI en temps réel
 
   chatRoomId: string = '';
   currentUserId: string = '';
+  recipientId: string = '';
   newMessageText: string = '';
-
   recipientPublicKeyPem: string = '';
 
   messages: DisplayMessage[] = [];
 
   private keyPair!: CryptoKeyPair;
   private messageSubscription!: Subscription;
-  private keySubscription!: Subscription;
-  private keyRequestSubscription!: Subscription;
 
   async ngOnInit(): Promise<void> {
-    this.currentUserId = this.authService.currentUser()?._id || '507f1f77bcf86cd799439011';
+    // 1. Récupération des Identifiants
+    let realUserId = this.authService.currentUser()?._id;
+    if (!realUserId) {
+      const savedUser = localStorage.getItem('user');
+      if (savedUser) {
+        try {
+          const parsed = JSON.parse(savedUser);
+          realUserId = parsed._id || parsed.id;
+        } catch (e) {
+          console.error('Erreur lecture localStorage user', e);
+        }
+      }
+    }
+
+    if (!realUserId) {
+      console.error('❌ [INIT] ERREUR : Aucun utilisateur en session.');
+      return;
+    }
+
+    this.currentUserId = realUserId;
     this.chatRoomId = this.route.snapshot.paramMap.get('roomId') || 'demo-room';
 
-    // 1. Générer la paire de clés E2EE locales
-    this.keyPair = await this.cryptoService.generateKeyPair();
-    const myPublicKeyPem = await this.cryptoService.exportPublicKey(this.keyPair.publicKey);
-
-    // 2. Enregistrer la clé publique en BDD pour gérer la messagerie hors-ligne
-    if (this.authService.currentUser()?._id) {
-      this.http.put(`http://localhost:3000/api/users/${this.currentUserId}/public-key`, {
-        publicKey: myPublicKeyPem
-      }).subscribe();
+    const recipientParam = this.route.snapshot.queryParamMap.get('recipientId');
+    if (recipientParam && recipientParam !== 'undefined') {
+      this.recipientId = recipientParam;
     }
 
-    // 3. Récupérer la clé publique du destinataire en BDD (fallback si hors-ligne)
-    const recipientId = this.route.snapshot.queryParamMap.get('recipientId');
-    if (recipientId && recipientId !== 'undefined') {
-      this.http.get<{ publicKey: string }>(`http://localhost:3000/api/users/${recipientId}/public-key`)
-        .subscribe({
-          next: (res) => {
-            if (res?.publicKey) {
-              this.recipientPublicKeyPem = res.publicKey;
-              console.log('🔑 Clé du destinataire chargée depuis MongoDB !');
-            }
-          },
-          error: (err) => console.log('Destinataire hors-ligne ou sans clé enregistrée :', err)
-        });
-    }
-
-    // 4. Rejoindre la room WebSockets
+    // 2. CRUCIAL : ABONNEMENT SOCKET EN PREMIER (AVANT TOUT AWAIT)
     this.chatService.joinRoom(this.chatRoomId);
+    this.initSocketListener();
 
-    // 5. Écouter la clé publique reçue en temps réel
-    this.keySubscription = this.chatService.onReceivePublicKey().subscribe((data: { senderId: string, publicKey: string }) => {
-      if (data.senderId !== this.currentUserId) {
-        this.recipientPublicKeyPem = data.publicKey;
-        console.log('🔑 Clé publique du correspondant reçue en direct !');
+    // 3. Gestion des clés E2EE (IndexedDB ou Génération)
+    let savedPrivateKey = await this.cryptoService.loadPrivateKey(this.currentUserId);
+    let myPublicKeyPem = '';
+
+    if (savedPrivateKey) {
+      try {
+        const res = await this.http.get<{ publicKey: string }>(`http://localhost:3000/api/users/${this.currentUserId}/public-key`).toPromise();
+        if (res?.publicKey) myPublicKeyPem = res.publicKey;
+      } catch (e) {
+        console.warn('Impossible de récupérer sa propre clé publique :', e);
       }
-    });
 
-    // 6. Écouter si un nouvel arrivant demande notre clé
-    this.keyRequestSubscription = this.chatService.onRequestPublicKey().subscribe(async (data) => {
-      if (data.senderId !== this.currentUserId) {
-        this.chatService.sendPublicKey({
-          chatRoomId: this.chatRoomId,
-          senderId: this.currentUserId,
-          publicKey: myPublicKeyPem
+      this.keyPair = {
+        privateKey: savedPrivateKey,
+        publicKey: myPublicKeyPem
+          ? await this.cryptoService.importPublicKey(myPublicKeyPem)
+          : (await this.cryptoService.generateKeyPair()).publicKey
+      };
+    } else {
+      this.keyPair = await this.cryptoService.generateKeyPair();
+      await this.cryptoService.savePrivateKey(this.currentUserId, this.keyPair.privateKey);
+
+      myPublicKeyPem = await this.cryptoService.exportPublicKey(this.keyPair.publicKey);
+      if (this.currentUserId) {
+        this.http.put(`http://localhost:3000/api/users/${this.currentUserId}/public-key`, { publicKey: myPublicKeyPem })
+          .subscribe({ error: (err) => console.error('PUT Key ERREUR :', err) });
+      }
+    }
+
+    // 4. Clé publique du destinataire
+    if (this.recipientId) {
+      this.http.get<{ publicKey: string }>(`http://localhost:3000/api/users/${this.recipientId}/public-key`)
+        .subscribe({
+          next: (res) => { if (res?.publicKey) this.recipientPublicKeyPem = res.publicKey; },
+          error: (err) => console.error('Erreur clé destinataire :', err)
         });
+    }
+
+    // 5. Charger l'historique
+    this.loadHistory();
+  }
+
+  // ÉCOUTEUR TEMPS RÉEL (Ici sont placés les logs de diagnostic)
+  private initSocketListener(): void {
+    this.messageSubscription = this.chatService.onReceiveMessage().subscribe(async (encryptedMsg: EncryptedMessage) => {
+
+      if (encryptedMsg.senderId === this.currentUserId) {
+        return;
+      }
+
+      if (!encryptedMsg.encryptedForRecipient) {
+        console.error('❌ [SOCKET ERREUR] Champ encryptedForRecipient absent dans le payload !', encryptedMsg);
+        return;
+      }
+
+      try {
+        const decryptedText = await this.cryptoService.decryptMessage(
+          encryptedMsg.encryptedForRecipient,
+          this.keyPair.privateKey
+        );
+
+        // NgZone garantit le rendu visuel instantané dans le template Angular
+        this.ngZone.run(() => {
+          this.messages.push({
+            senderId: encryptedMsg.senderId,
+            text: decryptedText,
+            timestamp: new Date(encryptedMsg.timestamp),
+            isMe: false
+          });
+        });
+      } catch (err) {
+        console.error('❌ [SOCKET ERREUR DÉCHIFFREMENT] Erreur WebCrypto :', err);
       }
     });
+  }
 
-    // 7. Diffuser notre clé ET demander celle des autres membres connectés
-    this.chatService.sendPublicKey({
-      chatRoomId: this.chatRoomId,
-      senderId: this.currentUserId,
-      publicKey: myPublicKeyPem
-    });
-    this.chatService.requestPublicKey(this.chatRoomId, this.currentUserId);
-
-    // 8. Charger l'historique depuis MongoDB
+  // CHARGEMENT DE L'HISTORIQUE
+  private loadHistory(): void {
     this.http.get<any[]>(`http://localhost:3000/api/chat/${this.chatRoomId}`).subscribe(async (history) => {
+      this.messages = [];
       for (const msg of history) {
+        const isMe = msg.senderId === this.currentUserId;
+        const blobToDecrypt = isMe ? msg.encryptedForSender : msg.encryptedForRecipient;
+
+        if (!blobToDecrypt) continue;
+
         try {
-          const decryptedText = await this.cryptoService.decryptMessage(
-            msg.encryptedContent,
-            this.keyPair.privateKey
-          );
+          const decryptedText = await this.cryptoService.decryptMessage(blobToDecrypt, this.keyPair.privateKey);
           this.messages.push({
             senderId: msg.senderId,
             text: decryptedText,
             timestamp: new Date(msg.timestamp),
-            isMe: msg.senderId === this.currentUserId
+            isMe
           });
         } catch (e) {
           this.messages.push({
             senderId: msg.senderId,
             text: '[Message chiffré — Clé non disponible]',
             timestamp: new Date(msg.timestamp),
-            isMe: msg.senderId === this.currentUserId
+            isMe
           });
         }
       }
     });
-
-    // 9. Écouter les messages entrants en temps réel
-    this.messageSubscription = this.chatService.onReceiveMessage().subscribe(async (encryptedMsg) => {
-      if (encryptedMsg.senderId === this.currentUserId) {
-        return;
-      }
-
-      try {
-        const decryptedText = await this.cryptoService.decryptMessage(
-          encryptedMsg.encryptedContent,
-          this.keyPair.privateKey
-        );
-
-        this.messages.push({
-          senderId: encryptedMsg.senderId,
-          text: decryptedText,
-          timestamp: encryptedMsg.timestamp,
-          isMe: false
-        });
-      } catch (err) {
-        console.error('Erreur déchiffrement message :', err);
-      }
-    });
   }
 
+  // ENVOI DE MESSAGE
   async send(): Promise<void> {
     if (!this.newMessageText.trim()) return;
 
@@ -158,44 +188,48 @@ export class Chat implements OnInit, OnDestroy {
     this.newMessageText = '';
 
     try {
-      // 1. Clé du destinataire ou fallback locale
-      let targetKeyPem = this.recipientPublicKeyPem;
-
-      if (!targetKeyPem) {
-        console.warn('⚠️ Clé du destinataire non disponible, fallback sur la clé locale.');
-        targetKeyPem = await this.cryptoService.exportPublicKey(this.keyPair.publicKey);
+      if (!this.recipientPublicKeyPem && this.recipientId) {
+        const res = await this.http.get<{ publicKey: string }>(`http://localhost:3000/api/users/${this.recipientId}/public-key`).toPromise();
+        if (res?.publicKey) this.recipientPublicKeyPem = res.publicKey;
       }
 
-      // 2. Chiffrement
-      const recipientPublicKey = await this.cryptoService.importPublicKey(targetKeyPem);
-      const encryptedText = await this.cryptoService.encryptMessage(rawText, recipientPublicKey);
+      if (!this.recipientPublicKeyPem) {
+        console.warn('⚠️ [ENVOI ABANDONNÉ] Le destinataire n\'a pas de clé publique.');
+        return;
+      }
 
-      const activeUserId = this.authService.currentUser()?._id || this.currentUserId;
+      const recipientKey = await this.cryptoService.importPublicKey(this.recipientPublicKeyPem);
+      const myPublicKeyPem = await this.cryptoService.exportPublicKey(this.keyPair.publicKey);
+      const myKey = await this.cryptoService.importPublicKey(myPublicKeyPem);
 
-      const messagePayload: EncryptedMessage = {
+      const encryptedForRecipient = await this.cryptoService.encryptMessage(rawText, recipientKey);
+      const encryptedForSender = await this.cryptoService.encryptMessage(rawText, myKey);
+
+      const messagePayload = {
         chatRoomId: this.chatRoomId,
-        senderId: activeUserId,
-        encryptedContent: encryptedText,
+        senderId: this.currentUserId,
+        recipientId: this.recipientId,
+        encryptedForRecipient,
+        encryptedForSender,
         timestamp: new Date()
       };
 
-      // 3. Émission Socket.io + Ajout UI
       this.chatService.sendMessage(messagePayload);
 
       this.messages.push({
-        senderId: activeUserId,
+        senderId: this.currentUserId,
         text: rawText,
         timestamp: new Date(),
         isMe: true
       });
     } catch (err) {
-      console.error('❌ Erreur lors du chiffrement ou de l\'envoi :', err);
+      console.error('❌ Erreur envoi message :', err);
     }
   }
 
   ngOnDestroy(): void {
-    if (this.messageSubscription) this.messageSubscription.unsubscribe();
-    if (this.keySubscription) this.keySubscription.unsubscribe();
-    if (this.keyRequestSubscription) this.keyRequestSubscription.unsubscribe();
+    if (this.messageSubscription) {
+      this.messageSubscription.unsubscribe();
+    }
   }
 }

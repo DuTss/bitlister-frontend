@@ -17,6 +17,7 @@ import { Terms } from './pages/terms/terms';
 import { Privacy } from './pages/privacy/privacy';
 import { About } from './pages/about/about';
 import { Chat } from './features/chat/chat';
+import { ChatList } from './features/chat-list/chat-list';
 
 
 export const routes: Routes = [
@@ -35,6 +36,7 @@ export const routes: Routes = [
   { path: 'about', component: About },
   { path: 'profile', component: Profile, canActivate: [authGuard] },
   { path: 'favorites',component: FavoritesList, canActivate: [authGuard] },
+  { path: 'messages', component: ChatList, canActivate: [authGuard] },
   { path: 'chat/:roomId', component: Chat, canActivate: [authGuard] },
   { path: 'chat', component: Chat, canActivate: [authGuard]},
   { path: '**', component: NotFound }

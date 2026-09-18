@@ -1,0 +1,25 @@
+.chat-list-container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+.conversation-card {
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.conversation-card:hover {
+  background-color: #f5f5f5;
+}
+
+.conv-info {
+  display: flex;
+  flex-direction: column;
+}
