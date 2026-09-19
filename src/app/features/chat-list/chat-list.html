@@ -11,7 +11,7 @@
     (click)="openChat(conv)">
 
     <div class="conv-info">
-      <strong>Discussion #{{ conv._id }}</strong>
+      <strong>{{ conv.otherUser?.pseudo || 'Utilisateur inconnu' }}</strong>
       <small>{{ conv.lastTimestamp | date:'short' }}</small>
     </div>
   </div>

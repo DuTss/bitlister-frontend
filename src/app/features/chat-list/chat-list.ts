@@ -5,10 +5,14 @@ import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../core/services/auth.service';
 
 interface Conversation {
-  _id: string; // chatRoomId (ex: listingId)
+  _id: string; // chatRoomId
   lastTimestamp: string | Date;
   senderId: string;
   recipientId: string;
+  otherUser?: {
+    _id: string;
+    pseudo: string;
+  };
 }
 
 @Component({
@@ -49,7 +53,7 @@ export class ChatList implements OnInit {
 
     this.currentUserId = realUserId;
 
-    // 2. Appel de l'API avec le VRAI utilisateur
+    // 2. Appel de l'API : les pseudos sont déjà inclus grâce au $lookup backend
     this.http.get<Conversation[]>(`http://localhost:3000/api/chat/user/${this.currentUserId}/conversations`)
       .subscribe({
         next: (data) => {
