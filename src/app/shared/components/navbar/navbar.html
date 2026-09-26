@@ -1,0 +1,55 @@
+<header class="navbar">
+  <div class="navbar-container">
+
+    <!-- Logo -->
+    <a routerLink="/" class="logo" (click)="closeMenu()">
+      <span class="logo-icon">⚡</span>
+      <span class="logo-text">Bit<strong>Lister</strong></span>
+    </a>
+
+    <!-- Bouton Burger (visible uniquement en mobile) -->
+    <button
+      class="burger-btn"
+      [class.active]="isMenuOpen"
+      (click)="toggleMenu()"
+      aria-label="Toggle menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+
+    <!-- Overlay sombre en fond lors de l'ouverture mobile -->
+    @if (isMenuOpen) {
+      <div class="drawer-overlay" (click)="closeMenu()"></div>
+    }
+
+    <!-- Navigation Desktop + Panneau Latéral Mobile -->
+    <nav class="nav-links" [class.open]="isMenuOpen">
+
+      <!-- En-tête du menu mobile -->
+      <div class="mobile-header">
+        <span class="mobile-title">Menu</span>
+        <button class="close-btn" (click)="closeMenu()">✕</button>
+      </div>
+
+      <!-- Liens principaux -->
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Annonces</a>
+
+      @if (authService.currentUser(); as user) {
+        <a routerLink="/create-listing" class="btn-create">+ Déposer une annonce</a>
+        <a routerLink="/my-listings" routerLinkActive="active">Mes annonces</a>
+        <a routerLink="/messages" routerLinkActive="active">Messages</a>
+        <a routerLink="/favorites" routerLinkActive="active">Favoris</a>
+        <a routerLink="/profile" routerLinkActive="active" class="user-badge-link" title="Accéder au profil">
+          👤 {{ user.pseudo }}
+        </a>
+        <button (click)="logout()" class="btn-logout">Déconnexion</button>
+      } @else {
+        <a routerLink="/login" class="btn-link">Connexion</a>
+        <a routerLink="/register" class="btn-primary">Inscription</a>
+      }
+
+    </nav>
+
+  </div>
+</header>

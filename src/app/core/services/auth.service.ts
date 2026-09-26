@@ -12,7 +12,7 @@ import { firstValueFrom } from 'rxjs';
 export class AuthService {
   private http = inject(HttpClient);
   private apiUrl = `${environment.apiUrl}/auth`;
-  private CryptoService = inject(CryptoService)
+  private CryptoService = inject(CryptoService);
 
   currentUser = signal<User | null>(this.getUserFromStorage());
 
@@ -38,11 +38,40 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
-  isLoggedIn(): boolean {
-    return !!this.getToken();
+  // Verification locale de l'expiration du token
+  private isTokenExpired(token: string): boolean {
+    try {
+      // Décodage de la partie Payload du JWT (base64)
+      const payloadBase64 = token.split('.')[1];
+      if (!payloadBase64) return true;
+
+      const payload = JSON.parse(atob(payloadBase64));
+
+      // Si pas de champ exp, on considère le token comme valide ou illimité
+      if (!payload.exp) return false;
+
+      // exp est exprimé en secondes, Date.now() est en millisecondes
+      const expirationTime = payload.exp * 1000;
+      return Date.now() >= expirationTime;
+    } catch (e) {
+      // Si le token est corrompu/illisible
+      return true;
+    }
   }
 
-  // Méthode à ajouter pour rafraîchir le signal et le LocalStorage
+  isLoggedIn(): boolean {
+    const token = this.getToken();
+    if (!token) return false;
+
+    // Si le token est présent mais expiré, on nettoie le storage et réinitialise le signal
+    if (this.isTokenExpired(token)) {
+      this.logout();
+      return false;
+    }
+
+    return true;
+  }
+
   updateCurrentUser(updatedUser: User): void {
     localStorage.setItem('user', JSON.stringify(updatedUser));
     this.currentUser.set(updatedUser);
@@ -57,7 +86,6 @@ export class AuthService {
   private getUserFromStorage(): any {
     const userJson = localStorage.getItem('user');
 
-    // Si la clé n'existe pas, vaut null ou vaut la chaîne "undefined"
     if (!userJson || userJson === 'undefined') {
       return null;
     }
@@ -66,25 +94,23 @@ export class AuthService {
       return JSON.parse(userJson);
     } catch (e) {
       console.error('Erreur lors du parse du user depuis le localStorage:', e);
-      localStorage.removeItem('user'); // Nettoyage de la valeur corrompue
+      localStorage.removeItem('user');
       return null;
     }
   }
 
   async registerPublicKey(userId: string): Promise<void> {
-  try {
-    // 1. Génération de la paire de clés
-    const keyPair = await this.CryptoService.generateKeyPair();
-    const publicKeyPem = await this.CryptoService.exportPublicKey(keyPair.publicKey);
+    try {
+      const keyPair = await this.CryptoService.generateKeyPair();
+      const publicKeyPem = await this.CryptoService.exportPublicKey(keyPair.publicKey);
 
-    // 2. Envoi au backend
-    await firstValueFrom(
-      this.http.put(`http://localhost:3000/api/users/${userId}/public-key`, {
-        publicKey: publicKeyPem
-      })
-    );
-  } catch (err) {
-    console.error('❌ Erreur lors de l\'enregistrement de la clé publique :', err);
+      await firstValueFrom(
+        this.http.put(`http://localhost:3000/api/users/${userId}/public-key`, {
+          publicKey: publicKeyPem
+        })
+      );
+    } catch (err) {
+      console.error('❌ Erreur lors de l\'enregistrement de la clé publique :', err);
+    }
   }
-}
 }

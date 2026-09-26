@@ -9,9 +9,7 @@
       <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Annonces</a>
 
       @if (authService.currentUser(); as user) {
-        <a routerLink="/create-listing" class="btn-create">+ Déposer une annonce</a>
         <div class="user-menu">
-          <a routerLink="/my-listings" routerLinkActive="active">Mes annonces</a>
           <!-- Nouveau lien de messagerie -->
           <a routerLink="/messages" routerLinkActive="active">💬 Messages</a>
           <a routerLink="/favorites" routerLinkActive="active">Favoris</a>

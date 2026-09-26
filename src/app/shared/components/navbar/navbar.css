@@ -1,0 +1,264 @@
+/* ==========================================================================
+   1. STYLES NAVBAR DESKTOP
+   ========================================================================== */
+.navbar {
+  background-color: var(--bg-dark, #1a1a1a);
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.8rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  text-decoration: none;
+  color: #fff;
+  font-size: 1.3rem;
+  z-index: 1002;
+}
+
+.logo-icon {
+  font-size: 1.5rem;
+  color: var(--primary-orange, #f7931a);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.nav-links a {
+  color: #d1d5db;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: #fff;
+}
+
+/* Boutons d'actions */
+.btn-primary {
+  background-color: var(--primary-orange, #f7931a) !important;
+  color: #fff !important;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm, 6px);
+  font-weight: 600 !important;
+  transition: opacity 0.2s;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+.btn-create {
+  background-color: rgba(247, 147, 26, 0.15);
+  color: var(--primary-orange, #f7931a) !important;
+  border: 1px solid var(--primary-orange, #f7931a);
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-sm, 6px);
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.btn-create:hover {
+  background-color: var(--primary-orange, #f7931a);
+  color: #fff !important;
+}
+
+.user-info-mobile {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+/* Badge utilisateur cliquable (Mon Profil) */
+.user-badge-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  color: #e5e7eb !important;
+  background-color: rgba(255, 255, 255, 0.08);
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-sm, 6px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.user-badge-link:hover,
+.user-badge-link.active {
+  background-color: rgba(247, 147, 26, 0.2);
+  border-color: var(--primary-orange, #f7931a);
+  color: var(--primary-orange, #f7931a) !important;
+}
+
+/* Adaptation mobile pour le badge cliquable */
+@media (max-width: 900px) {
+  .user-badge-link {
+    width: 100%;
+    box-sizing: border-box;
+    justify-content: flex-start;
+    padding: 0.6rem 0.8rem;
+  }
+}
+
+.btn-logout {
+  background: transparent;
+  border: 1px solid #dc3545;
+  color: #dc3545;
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-sm, 6px);
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.btn-logout:hover {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+/* Bouton Burger & Header Mobile (cachés sur desktop) */
+.burger-btn,
+.mobile-header {
+  display: none;
+}
+
+/* ==========================================================================
+   2. STYLES RESPONSIVE & PANNEAU LATÉRAL MOBILE
+   ========================================================================== */
+@media (max-width: 900px) {
+
+  /* Bouton Burger */
+  .burger-btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1002;
+  }
+
+  .burger-btn .bar {
+    width: 100%;
+    height: 3px;
+    background-color: #fff;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+  }
+
+  /* Animation d'ouverture du burger en Croix (X) */
+  .burger-btn.active .bar:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+  }
+  .burger-btn.active .bar:nth-child(2) {
+    opacity: 0;
+  }
+  .burger-btn.active .bar:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+  }
+
+  /* Overlay de fond semi-transparent */
+  .drawer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(2px);
+    z-index: 1000;
+  }
+
+  /* Drawer / Panneau latéral mobile */
+  .nav-links {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 280px;
+    height: 100vh;
+    background-color: var(--bg-dark, #1a1a1a);
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 2rem 1.5rem;
+    gap: 1.5rem;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1001;
+    overflow-y: auto;
+  }
+
+  .nav-links.open {
+    right: 0;
+  }
+
+  /* Header à l'intérieur du panneau mobile */
+  .mobile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #333;
+    margin-bottom: 0.5rem;
+  }
+
+  .mobile-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--primary-orange, #f7931a);
+  }
+
+  .close-btn {
+    background: transparent;
+    border: none;
+    color: #9ca3af;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+
+  .nav-links a {
+    font-size: 1.1rem;
+    width: 100%;
+  }
+
+  .user-info-mobile {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    padding-top: 1rem;
+    border-top: 1px solid #333;
+    gap: 1rem;
+  }
+
+  .user-badge-link {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .btn-logout {
+    width: 100%;
+  }
+}
